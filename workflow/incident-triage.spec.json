@@ -19,6 +19,16 @@
       { "lookupName": "Medium", "value": 2 },
       { "lookupName": "High", "value": 3 },
       { "lookupName": "Critical", "value": 4 }
+    ],
+    "status": [
+      { "lookupName": "Created", "value": 1 }, { "lookupName": "Ready", "value": 2 },
+      { "lookupName": "In Progress", "value": 3 }, { "lookupName": "Incomplete", "value": 4 },
+      { "lookupName": "Revised", "value": 5 }, { "lookupName": "Pending", "value": 6 },
+      { "lookupName": "On Hold", "value": 7 }, { "lookupName": "Approved", "value": 8 },
+      { "lookupName": "Completed", "value": 9 }, { "lookupName": "Closed", "value": 10 },
+      { "lookupName": "New", "value": 11 }, { "lookupName": "Acknowledged", "value": 12 },
+      { "lookupName": "Investigating", "value": 13 }, { "lookupName": "Monitoring", "value": 14 },
+      { "lookupName": "Resolved", "value": 15 }
     ]
   },
   "diagram": {
