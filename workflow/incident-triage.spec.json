@@ -1,0 +1,52 @@
+{
+  "$comment": "Dedicated Workflow Manager item for Watch Center incident triage. The dashboard creates one job per alert ID. Native Workflow Manager job priority, status, comments, assignments, step history, and job history are the authoritative audit trail.",
+  "workflowItem": {
+    "title": "Watch Center Incident Triage",
+    "description": "Authoritative incident triage and audit history for California Security Operations Watch Center alerts. Uses native Workflow Manager priority, status, comments, assignments, and history so every action is attributable and reportable."
+  },
+  "category": "Security Operations",
+  "intake": { "type": "application" },
+  "groups": {
+    "triage": {
+      "title": "Watch Center Incident Triage - Analysts",
+      "description": "Analysts authorized to triage Watch Center incidents and review their audit history.",
+      "roles": ["Manage Jobs - Basic", "Manage Jobs - Advanced"]
+    }
+  },
+  "lookups": {
+    "priority": [
+      { "lookupName": "Low", "value": 1 },
+      { "lookupName": "Medium", "value": 2 },
+      { "lookupName": "High", "value": 3 },
+      { "lookupName": "Critical", "value": 4 }
+    ]
+  },
+  "diagram": {
+    "name": "Watch Center Incident Triage Lifecycle",
+    "description": "Incident intake, active analyst triage, resolution review, optional return to investigation, and audited closure.",
+    "initialStep": "incident-intake",
+    "steps": [
+      { "key": "incident-intake", "name": "Incident Received", "kind": "startEnd", "at": { "x": 0, "y": 0 }, "prompt": "A Watch Center incident has been registered. Proceed to analyst triage." },
+      { "key": "active-triage", "name": "Active Triage", "kind": "manual", "at": { "x": 220, "y": 0 }, "group": "triage", "userRun": true, "canComment": true, "prompt": "Review the incident, change its Workflow Manager priority and status, and append comments. Continue when it is ready for resolution review." },
+      { "key": "resolution-review", "name": "Resolution Review", "kind": "question", "at": { "x": 440, "y": 0 }, "group": "triage", "question": "Is this incident ready to close?", "responses": [ { "key": "Close", "value": 1 }, { "key": "ReturnToTriage", "value": 0 } ] },
+      { "key": "incident-closed", "name": "Incident Closed", "kind": "startEnd", "at": { "x": 660, "y": 0 }, "group": "triage", "prompt": "Confirm final disposition and close the incident job. Native Workflow Manager history and comments remain available for audit reporting." }
+    ],
+    "paths": [
+      { "from": "incident-intake", "to": "active-triage" },
+      { "from": "active-triage", "to": "resolution-review" },
+      { "from": "resolution-review", "to": "incident-closed", "answer": 1 },
+      { "from": "resolution-review", "to": "active-triage", "answer": 0, "ports": ["TOP", "TOP"] }
+    ]
+  },
+  "jobTemplates": [
+    {
+      "name": "Watch Center Incident",
+      "description": "Creates one auditable Workflow Manager job per Watch Center alert. The alert ID is stored in the job name and the source details in its description; native job history and comments provide the full audit record.",
+      "defaultPriority": "Medium",
+      "defaultJobName": "WATCH_[index]",
+      "defaultJobDuration": 7,
+      "defaultAssignment": { "group": "triage" },
+      "shareWith": ["triage"]
+    }
+  ]
+}
