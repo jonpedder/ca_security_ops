@@ -1,0 +1,19 @@
+{
+  "name": "California Security Operations — Watch Center",
+  "short_name": "CA Security Ops",
+  "description": "An authenticated operational display for the ArcGIS Watch Center alert feed. This is not an official Cal OES system.",
+  "id": "./",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#071824",
+  "theme_color": "#003B5C",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": [
+    "government",
+    "security",
+    "utilities"
+  ]
+}
