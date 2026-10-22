@@ -24,8 +24,10 @@ test('map popup exposes the standard dock and undock control', () => {
   assert.match(html, /popup:\{dockEnabled:false,dockOptions:\{position:'bottom-right',buttonEnabled:true\}\}/);
 });
 
-test('Home and bookmark viewpoints use the ArcGIS Viewpoint targetGeometry property', () => {
-  assert.match(html, /const californiaViewpoint=\{targetGeometry:\{xmin:-124\.6/);
+test('Home and bookmark viewpoints use ArcGIS Extent geometries', () => {
+  assert.match(html, /import Extent from/);
+  assert.match(html, /californiaViewpoint=\{targetGeometry:extent\(-124\.6,32\.4,-114\.0,42\.1\)\}/);
+  assert.match(html, /viewpoint:\{targetGeometry:extent\(-124\.6,36\.8,-119\.0,42\.1\)\}/);
   assert.doesNotMatch(html, /viewpoint:\{target:\{/);
 });
 
