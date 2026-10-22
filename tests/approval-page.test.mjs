@@ -25,6 +25,8 @@ test('approval submission updates Workflow Manager and writes an audit comment',
 });
 
 test('approval page provides incident and active-triage PDF reports', () => {
+  assert.match(approval, /src="\.\/vendor\/jspdf\.umd\.min\.js"/);
+  assert.doesNotMatch(approval, /jspdf\/2\.5\.2/);
   assert.match(approval, /id="incidentPdf"/);
   assert.match(approval, /id="allPdf"/);
   assert.match(approval, /function exportIncidentPdf/);
