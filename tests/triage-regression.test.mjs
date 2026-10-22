@@ -19,3 +19,15 @@ test('new triage jobs retain creation state through submission', () => {
     'saveTriage must define createdNew before the new-job branch uses it'
   );
 });
+
+test('audit trail converts structured comments to human-readable entries', () => {
+  assert.match(html, /text\.startsWith\('AUDIT_JSON:'\)/);
+  assert.match(html, /text\.startsWith\('INCIDENT_JSON:'\)/);
+  assert.match(html, /eventType:'Incident Registered'/);
+  assert.match(html, /incidentAuditSummary\(p\)/);
+  assert.doesNotMatch(
+    html,
+    /note:p\.note\|\|c\.comment/,
+    'structured comments must not fall back to displaying raw JSON'
+  );
+});
