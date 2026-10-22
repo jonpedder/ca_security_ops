@@ -23,3 +23,12 @@ test('approval submission updates Workflow Manager and writes an audit comment',
   assert.match(approval, /AUDIT_JSON:/);
   assert.match(approval, /An approval note is required/);
 });
+
+test('approval page provides incident and active-triage PDF reports', () => {
+  assert.match(approval, /id="incidentPdf"/);
+  assert.match(approval, /id="allPdf"/);
+  assert.match(approval, /function exportIncidentPdf/);
+  assert.match(approval, /function exportAllTriagePdf/);
+  assert.match(approval, /!j\.closed&&!\['Completed','Closed','Resolved'\]\.includes\(j\.jobStatus\)/);
+  assert.match(approval, /Triage and Approval History/);
+});
