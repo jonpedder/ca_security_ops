@@ -20,6 +20,10 @@ test('new triage jobs retain creation state through submission', () => {
   );
 });
 
+test('map popup exposes the standard dock and undock control', () => {
+  assert.match(html, /popup:\{dockEnabled:false,dockOptions:\{position:'bottom-right',buttonEnabled:true\}\}/);
+});
+
 test('operations-map triage pane provides a single-incident PDF report', () => {
   assert.match(html, /id="triagePdfBtn"/);
   assert.match(html, /function exportIncidentTriagePdf/);
