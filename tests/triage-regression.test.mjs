@@ -24,6 +24,15 @@ test('map popup exposes the standard dock and undock control', () => {
   assert.match(html, /popup:\{dockEnabled:false,dockOptions:\{position:'bottom-right',buttonEnabled:true\}\}/);
 });
 
+test('operations map loads its layers and styling from the saved Web Map item', () => {
+  assert.match(html, /const WEBMAP_ID='7158f6e6b09d4ff4b3cbae7c9410747f'/);
+  assert.match(html, /new WebMap\(\{portalItem:\{id:WEBMAP_ID,portal:\{url:PORTAL\}\}\}\)/);
+  assert.match(html, /layer=map\.layers\.find\(x=>x\.title==='Watch Alerts'\)/);
+  assert.match(html, /watchAreasLayer=map\.layers\.find\(x=>x\.title==='Watch Areas'\)/);
+  assert.doesNotMatch(html, /new FeatureLayer\(/);
+  assert.doesNotMatch(html, /new Map\(\{basemap:/);
+});
+
 test('operations-map triage pane provides a single-incident PDF report', () => {
   assert.match(html, /id="triagePdfBtn"/);
   assert.match(html, /function exportIncidentTriagePdf/);
