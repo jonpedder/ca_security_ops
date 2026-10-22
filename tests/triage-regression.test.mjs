@@ -24,6 +24,11 @@ test('map popup exposes the standard dock and undock control', () => {
   assert.match(html, /popup:\{dockEnabled:false,dockOptions:\{position:'bottom-right',buttonEnabled:true\}\}/);
 });
 
+test('Home and bookmark viewpoints use the ArcGIS Viewpoint targetGeometry property', () => {
+  assert.match(html, /const californiaViewpoint=\{targetGeometry:\{xmin:-124\.6/);
+  assert.doesNotMatch(html, /viewpoint:\{target:\{/);
+});
+
 test('operations map loads its layers and styling from the saved Web Map item', () => {
   assert.match(html, /const WEBMAP_ID='7158f6e6b09d4ff4b3cbae7c9410747f'/);
   assert.match(html, /new WebMap\(\{portalItem:\{id:WEBMAP_ID,portal:\{url:PORTAL\}\}\}\)/);
