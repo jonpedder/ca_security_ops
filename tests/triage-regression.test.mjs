@@ -9,6 +9,13 @@ test('application branding uses the Mission Insights title and subtitle', () => 
   assert.match(html, /<div class="brand"><h1>Mission Insights<\/h1><p>A Watch Center Integration<\/p><p class="powered-by">Powered by ArcGIS Velocity and Workflow Manager<\/p><\/div>/);
 });
 
+test('multi-select filters can collapse to preserve incident list space', () => {
+  assert.match(html, /<details class="filter-details" id="advancedFilters"><summary>Severity and category filters<\/summary>/);
+  assert.match(html, /<select id="severityFilter"[^>]+multiple/);
+  assert.match(html, /<select id="categoryFilter"[^>]+multiple/);
+  assert.doesNotMatch(html, /<details class="filter-details" id="advancedFilters" open>/);
+});
+
 test('clicks inside incident triage or popup controls do not clear the selected incident', () => {
   assert.match(
     html,
