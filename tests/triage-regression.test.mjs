@@ -6,7 +6,7 @@ const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
 test('application branding uses the Mission Insights title and subtitle', () => {
   assert.match(html, /<title>Mission Insights<\/title>/);
-  assert.match(html, /<div class="brand"><h1>Mission Insights<\/h1><p>A Watch Center Integration<\/p><\/div>/);
+  assert.match(html, /<div class="brand"><h1>Mission Insights<\/h1><p>A Watch Center Integration<\/p><p class="powered-by">Powered by ArcGIS Velocity and Workflow Manager<\/p><\/div>/);
 });
 
 test('clicks inside incident triage or popup controls do not clear the selected incident', () => {
