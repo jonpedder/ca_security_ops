@@ -20,6 +20,13 @@ test('new triage jobs retain creation state through submission', () => {
   );
 });
 
+test('operations-map triage pane provides a single-incident PDF report', () => {
+  assert.match(html, /id="triagePdfBtn"/);
+  assert.match(html, /function exportIncidentTriagePdf/);
+  assert.match(html, /state\.audit=await auditData\(d\);await exportAuditPdf\(\)/);
+  assert.match(html, /src="\.\/vendor\/jspdf\.umd\.min\.js"/);
+});
+
 test('audit trail converts structured comments to human-readable entries', () => {
   assert.match(html, /text\.startsWith\('AUDIT_JSON:'\)/);
   assert.match(html, /text\.startsWith\('INCIDENT_JSON:'\)/);
