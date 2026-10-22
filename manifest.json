@@ -1,6 +1,6 @@
 {
-  "name": "California Security Operations — Watch Center",
-  "short_name": "CA Security Ops",
+  "name": "Mission Insights",
+  "short_name": "Mission Insights",
   "description": "An authenticated operational display for the ArcGIS Watch Center alert feed. This is not an official Cal OES system.",
   "id": "./",
   "start_url": "./index.html",
