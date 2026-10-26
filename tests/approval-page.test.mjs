@@ -17,6 +17,12 @@ test('approval page lists ALERT workflow jobs and exposes persona filters', () =
   assert.match(approval, /Watch Commander/);
 });
 
+test('approval status filter defaults to Submitted on initial load', () => {
+  assert.match(approval, /statusInitialized:false/);
+  assert.match(approval, /current=state\.statusInitialized\?sel\.value:'Submitted'/);
+  assert.match(approval, /state\.statusInitialized=true/);
+});
+
 test('approval submission updates Workflow Manager and writes an audit comment', () => {
   assert.match(approval, /jobs\/'\+job\.jobId\+'\/update/);
   assert.match(approval, /Approval Decision/);
