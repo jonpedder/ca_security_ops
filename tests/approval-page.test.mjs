@@ -17,6 +17,13 @@ test('approval page lists ALERT workflow jobs and exposes persona filters', () =
   assert.match(approval, /Watch Commander/);
 });
 
+test('triage list color-codes each workflow status icon', () => {
+  assert.match(approval, /Submitted:'#8b9bab'/);
+  assert.match(approval, /class="status-icon"/);
+  assert.match(approval, /\.status-icon\{[^}]*background:var\(--status-color\)/);
+  assert.match(approval, /\.pill\{[^}]*color:var\(--status-color\)/);
+});
+
 test('approval status filter defaults to Submitted on initial load', () => {
   assert.match(approval, /statusInitialized:false/);
   assert.match(approval, /current=state\.statusInitialized\?sel\.value:'Submitted'/);
