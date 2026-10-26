@@ -39,6 +39,14 @@ test('triage claims group-assigned current steps before updating a job', () => {
   assert.match(html, /if\(before\)await claimCurrentSteps\(before\)/);
 });
 
+test('initial triage claims a newly created group-assigned job before updating it', () => {
+  assert.match(
+    html,
+    /const createdJob=await wf\('jobs\/'\+t\.jobId\+'\?extProps=true'\);await claimCurrentSteps\(createdJob\);await Promise\.all\(\[wf\('jobs\/'\+t\.jobId\+'\/update'/,
+    'new jobs must be claimed before the first status update'
+  );
+});
+
 test('triage only reuses jobs created from the current audited template', () => {
   assert.match(html, /fields:\['jobId','jobName','jobStatus','priority','closed','createdDate','jobTemplateId'\]/);
   assert.match(html, /x\.jobTemplateId===WFM_TEMPLATE/);
