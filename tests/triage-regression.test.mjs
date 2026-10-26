@@ -75,11 +75,16 @@ test('triage only reuses jobs created from the current audited template', () => 
 });
 
 test('alerts enter the triage queue only through explicit operations-map triage', () => {
-  assert.doesNotMatch(html, /queueSubmittedIncidents\(newIncidents\)/);
+  assert.doesNotMatch(html, /createSubmittedTriage|queueSubmittedIncidents/);
   assert.doesNotMatch(html, /newIncidents=state\.seenAlertIds/);
   assert.match(html, /\$\('saveTriage'\)\.onclick=\(\)=>coordinateIncidentMutation\(d\.id,\(\)=>saveTriage\(d\)\)/);
   assert.match(html, /if\(!t\)\{const body=\{numberOfJobs:1/);
-  assert.doesNotMatch(html, /queueSubmittedIncidents\(newIncidents\)/);
+  assert.doesNotMatch(html, /createSubmittedTriage|queueSubmittedIncidents/);
+});
+
+test('only the manual saveTriage path can create a workflow job', () => {
+  assert.equal((html.match(/jobTemplates\/'\+WFM_TEMPLATE\+'\/job/g) || []).length, 1);
+  assert.match(html, /async function saveTriage\(d\)/);
 });
 
 test('alert refresh never creates Workflow Manager jobs', () => {
