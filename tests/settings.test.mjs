@@ -22,6 +22,23 @@ test('shared settings preserve immutable base defaults and versioned storage',()
   assert.match(settingsModule,/function validate/);
 });
 
+test('settings support direct symbol upload with a live preview before save',()=>{
+  assert.match(settingsPage,/data-icon-upload/);
+  assert.match(settingsPage,/accept="'\+ICON_UPLOAD_TYPES/);
+  assert.match(settingsPage,/function updatePreview\(kind\)/);
+  assert.match(settingsPage,/symbol loaded for preview\. Save settings to apply it/);
+  assert.match(settingsModule,/MAX_ICON_UPLOAD_BYTES/);
+  assert.match(settingsModule,/data:image\\\/\(\?:png\|jpeg\|gif\|webp\)/);
+});
+
+test('settings templates can be exported and imported for preview before saving',()=>{
+  assert.match(settingsPage,/id="exportTemplate"/);
+  assert.match(settingsPage,/id="importTemplate"/);
+  assert.match(settingsPage,/mission-insights-settings-template\.json/);
+  assert.match(settingsPage,/Template imported for preview\. Click Save settings to apply it/);
+  assert.match(settingsPage,/validateSettings\(parsed\)/);
+});
+
 test('operations and approval pages both link to and consume shared settings',()=>{
   assert.match(operations,/href="\.\/settings\.html"/);
   assert.match(approval,/href="\.\/settings\.html"/);
