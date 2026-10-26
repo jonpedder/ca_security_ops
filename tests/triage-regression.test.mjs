@@ -44,6 +44,18 @@ test('triage only reuses jobs created from the current audited template', () => 
   assert.match(html, /x\.jobTemplateId===WFM_TEMPLATE/);
 });
 
+test('new records entering the incident list are submitted to the triage queue', () => {
+  assert.match(html, /newIncidents=state\.seenAlertIds\?incidents\.filter/);
+  assert.match(html, /queueSubmittedIncidents\(newIncidents\)/);
+  assert.match(html, /async function createSubmittedTriage\(d\)/);
+  assert.match(html, /jobStatus:'Submitted'/);
+  assert.match(html, /Automatically submitted when the alert entered the incident list/);
+});
+
+test('initial page load does not backfill every visible alert as a new submission', () => {
+  assert.match(html, /newIncidents=state\.seenAlertIds\?incidents\.filter\(d=>!state\.seenAlertIds\.has\(d\.id\)\):\[\]/);
+});
+
 test('map popup exposes the standard dock and undock control', () => {
   assert.match(html, /popup:\{dockEnabled:false,dockOptions:\{position:'bottom-right',buttonEnabled:true\}\}/);
 });
