@@ -60,7 +60,13 @@ test('app branding is configurable below settings templates',()=>{
   assert.match(settingsPage,/Settings templates[\s\S]*App branding[\s\S]*Main app tab labels/);
   for(const id of ['brandingAppName','brandingSubtitle','brandingLogoUrl','brandingLogoUpload','brandingLogoPreview']) assert.match(settingsPage,new RegExp('id="'+id+'"'));
   assert.match(settingsPage,/Uploaded logos must be 300 KB or smaller/);
+  assert.match(settingsPage,/Recommended: 88 × 100 px or larger at the same 22:25 aspect ratio/);
   assert.match(settingsPage,/accept="image\/png,image\/jpeg,image\/gif,image\/webp"/);
+  assert.match(settingsPage,/Live header previews/);
+  for(const label of ['Operations Map','Incident Approval','Settings']) assert.match(settingsPage,new RegExp('branding-preview-label">'+label));
+  assert.match(settingsPage,/function updateBrandingDraftPreview\(\)/);
+  assert.match(settingsPage,/brandingAppName'\)\.oninput=updateBrandingDraftPreview/);
+  assert.match(settingsPage,/brandingSubtitle'\)\.oninput=updateBrandingDraftPreview/);
   assert.match(operations,/applyBranding\(document,appSettings\.branding\)/);
   assert.match(approval,/applyBranding\(document,appSettings\.branding\)/);
 });
