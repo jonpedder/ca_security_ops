@@ -13,6 +13,7 @@ test('settings page exposes all requested configuration sections and reset',()=>
   assert.match(settingsPage,/id="personaLabels"/);
   assert.match(settingsPage,/id="incidentIcons"/);
   assert.match(settingsPage,/id="buttonLabels"/);
+  assert.match(settingsPage,/id="tickerSpeed"[^>]*><option value="300">Slow<\/option><option value="120">Medium<\/option><option value="75">Fast<\/option><option value="40">Faster<\/option><option value="0">Paused<\/option>/);
 });
 
 test('shared settings preserve immutable base defaults and versioned storage',()=>{
