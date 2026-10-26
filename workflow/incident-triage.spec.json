@@ -1,20 +1,27 @@
 {
-  "$comment": "Dedicated Workflow Manager item for Watch Center incident triage. The incident_triage extended-property table stores source incident context and the latest structured audit event; native Workflow Manager comments and history remain the append-only authoritative trail.",
+  "$comment": "Audited Watch Center workflow using the California Security Operations - Request Approval lifecycle, lookup values, groups, and request_details fields. incident_audit stores the latest structured audit state; native comments and history retain the append-only event trail.",
   "workflowItem": {
     "title": "Watch Center Incident Triage Audited",
-    "description": "Authoritative incident triage and audit history for California Security Operations Watch Center alerts. Uses native Workflow Manager priority, status, comments, assignments, and history so every action is attributable and reportable."
+    "description": "Audited Watch Center incident handling using the California Security Operations request review and approval lifecycle and values."
   },
   "category": "Security Operations",
   "intake": {
     "type": "application"
   },
   "groups": {
-    "triage": {
-      "title": "Watch Center Incident Triage - Analysts",
-      "description": "Analysts authorized to triage Watch Center incidents and review their audit history.",
+    "coordinators": {
+      "title": "Security Requests - Coordinators",
+      "description": "Coordinates intake, revisions, fulfillment, and completion review.",
       "roles": [
         "Manage Jobs - Basic",
         "Manage Jobs - Advanced"
+      ]
+    },
+    "approvers": {
+      "title": "Security Requests - Approvers",
+      "description": "Performs formal security request approval decisions.",
+      "roles": [
+        "Manage Jobs - Basic"
       ]
     }
   },
@@ -22,19 +29,15 @@
     "priority": [
       {
         "lookupName": "Low",
-        "value": 1
+        "value": 0
       },
       {
         "lookupName": "Medium",
-        "value": 2
+        "value": 5
       },
       {
         "lookupName": "High",
-        "value": 3
-      },
-      {
-        "lookupName": "Critical",
-        "value": 4
+        "value": 10
       }
     ],
     "status": [
@@ -77,134 +80,377 @@
       {
         "lookupName": "Closed",
         "value": 10
-      },
-      {
-        "lookupName": "New",
-        "value": 11
-      },
-      {
-        "lookupName": "Acknowledged",
-        "value": 12
-      },
-      {
-        "lookupName": "Investigating",
-        "value": 13
-      },
-      {
-        "lookupName": "Monitoring",
-        "value": 14
-      },
-      {
-        "lookupName": "Resolved",
-        "value": 15
       }
     ]
   },
   "diagram": {
-    "name": "Watch Center Incident Triage Lifecycle",
-    "description": "Incident intake, active analyst triage, resolution review, optional return to investigation, and audited closure.",
-    "initialStep": "incident-intake",
+    "name": "Security Request Review and Approval - Audited",
+    "description": "Coordinator intake and completeness check, formal approver decision, revision loop, fulfillment, closure, and auditable incident state.",
+    "initialStep": "request-received",
     "steps": [
       {
-        "key": "incident-intake",
-        "name": "Incident Received",
+        "key": "request-received",
+        "name": "Request Received",
         "kind": "startEnd",
         "at": {
           "x": 0,
           "y": 0
         },
-        "prompt": "A Watch Center incident has been registered. Proceed to analyst triage."
+        "automatic": true,
+        "proceedNext": true,
+        "prompt": "A new request has been logged. Review Request Details and proceed to intake."
       },
       {
-        "key": "active-triage",
-        "name": "Active Triage",
+        "key": "intake-review",
+        "name": "Intake and Completeness Review",
         "kind": "manual",
         "at": {
           "x": 220,
           "y": 0
         },
-        "group": "triage",
+        "group": "coordinators",
         "userRun": true,
-        "canComment": true,
-        "prompt": "Review the incident, change its Workflow Manager priority and status, and append comments. Continue when it is ready for resolution review."
+        "prompt": "Coordinator: verify requester, request type, operational area, justification, priority, and supporting information."
       },
       {
-        "key": "resolution-review",
-        "name": "Resolution Review",
+        "key": "complete-question",
+        "name": "Request Complete?",
         "kind": "question",
         "at": {
           "x": 440,
           "y": 0
         },
-        "group": "triage",
-        "question": "Is this incident ready to close?",
+        "group": "coordinators",
+        "question": "Is the request complete and ready for approval?",
         "responses": [
           {
-            "key": "Close",
+            "key": "Yes",
+            "displayName": "Yes",
             "value": 1
           },
           {
-            "key": "ReturnToTriage",
+            "key": "NeedsInformation",
+            "displayName": "Needs information",
             "value": 0
           }
         ]
       },
       {
-        "key": "incident-closed",
-        "name": "Incident Closed",
-        "kind": "startEnd",
+        "key": "request-information",
+        "name": "Collect Additional Information",
+        "kind": "manual",
         "at": {
-          "x": 660,
+          "x": 440,
+          "y": 180
+        },
+        "group": "coordinators",
+        "userRun": true,
+        "prompt": "Contact the requester, collect missing information, and update Request Details before resubmitting."
+      },
+      {
+        "key": "approval-review",
+        "name": "Approval Review",
+        "kind": "manual",
+        "at": {
+          "x": 680,
           "y": 0
         },
-        "group": "triage",
-        "prompt": "Confirm final disposition and close the incident job. Native Workflow Manager history and comments remain available for audit reporting."
+        "group": "approvers",
+        "userRun": true,
+        "prompt": "Approver: review the complete request, business justification, priority, and operational impact. Record decision notes."
+      },
+      {
+        "key": "approval-question",
+        "name": "Approval Decision",
+        "kind": "question",
+        "at": {
+          "x": 900,
+          "y": 0
+        },
+        "group": "approvers",
+        "question": "What is the approval decision?",
+        "responses": [
+          {
+            "key": "Approved",
+            "displayName": "Approved",
+            "value": 1
+          },
+          {
+            "key": "ChangesRequired",
+            "displayName": "Changes required",
+            "value": 2
+          },
+          {
+            "key": "Rejected",
+            "displayName": "Rejected",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "key": "revise-request",
+        "name": "Revise Request",
+        "kind": "manual",
+        "at": {
+          "x": 900,
+          "y": 180
+        },
+        "group": "coordinators",
+        "userRun": true,
+        "prompt": "Coordinator: address approver comments, update the request, and return it for approval."
+      },
+      {
+        "key": "fulfill-request",
+        "name": "Fulfill Approved Request",
+        "kind": "manual",
+        "at": {
+          "x": 1140,
+          "y": -90
+        },
+        "group": "coordinators",
+        "userRun": true,
+        "prompt": "Coordinator: carry out or coordinate the approved work. Record completion evidence and notes."
+      },
+      {
+        "key": "completion-review",
+        "name": "Completion Verified?",
+        "kind": "question",
+        "at": {
+          "x": 1360,
+          "y": -90
+        },
+        "group": "coordinators",
+        "question": "Has the approved request been fulfilled and documented?",
+        "responses": [
+          {
+            "key": "Yes",
+            "displayName": "Yes",
+            "value": 1
+          },
+          {
+            "key": "No",
+            "displayName": "No",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "key": "approved-closed",
+        "name": "Approved Request Closed",
+        "kind": "startEnd",
+        "at": {
+          "x": 1580,
+          "y": -90
+        },
+        "automatic": true,
+        "proceedNext": true,
+        "prompt": "The approved request is complete. Confirm closure to finish the job."
+      },
+      {
+        "key": "rejected-closed",
+        "name": "Rejected Request Closed",
+        "kind": "startEnd",
+        "at": {
+          "x": 1140,
+          "y": 120
+        },
+        "automatic": true,
+        "proceedNext": true,
+        "prompt": "The request was rejected. Ensure decision notes are recorded, then confirm closure."
       }
     ],
     "paths": [
       {
-        "from": "incident-intake",
-        "to": "active-triage"
+        "from": "request-received",
+        "to": "intake-review"
       },
       {
-        "from": "active-triage",
-        "to": "resolution-review"
+        "from": "intake-review",
+        "to": "complete-question"
       },
       {
-        "from": "resolution-review",
-        "to": "incident-closed",
+        "from": "complete-question",
+        "to": "approval-review",
         "answer": 1
       },
       {
-        "from": "resolution-review",
-        "to": "active-triage",
+        "from": "complete-question",
+        "to": "request-information",
         "answer": 0,
         "ports": [
-          "TOP",
+          "BOTTOM",
           "TOP"
+        ]
+      },
+      {
+        "from": "request-information",
+        "to": "intake-review",
+        "ports": [
+          "LEFT",
+          "BOTTOM"
+        ]
+      },
+      {
+        "from": "approval-review",
+        "to": "approval-question"
+      },
+      {
+        "from": "approval-question",
+        "to": "fulfill-request",
+        "answer": 1
+      },
+      {
+        "from": "approval-question",
+        "to": "revise-request",
+        "answer": 2,
+        "ports": [
+          "BOTTOM",
+          "TOP"
+        ]
+      },
+      {
+        "from": "approval-question",
+        "to": "rejected-closed",
+        "answer": 0,
+        "ports": [
+          "BOTTOM",
+          "LEFT"
+        ]
+      },
+      {
+        "from": "revise-request",
+        "to": "approval-review",
+        "ports": [
+          "LEFT",
+          "BOTTOM"
+        ]
+      },
+      {
+        "from": "fulfill-request",
+        "to": "completion-review"
+      },
+      {
+        "from": "completion-review",
+        "to": "approved-closed",
+        "answer": 1
+      },
+      {
+        "from": "completion-review",
+        "to": "fulfill-request",
+        "answer": 0,
+        "ports": [
+          "BOTTOM",
+          "BOTTOM"
         ]
       }
     ]
   },
   "jobTemplates": [
     {
-      "name": "Watch Center Incident Audited",
-      "description": "Creates one auditable Workflow Manager job per Watch Center alert. Incident context and latest audit state are stored in the incident_triage extended-property table; native comments and history retain the append-only event trail.",
+      "name": "Watch Center Security Request Audited",
+      "description": "Audited Watch Center incident using the California Security Operations request approval lifecycle and Request Details values.",
       "defaultPriority": "Medium",
-      "defaultJobName": "WATCH_[index]",
-      "defaultJobDuration": 7,
+      "defaultJobName": "SEC-REQ_[index]",
+      "defaultJobDuration": 14,
       "defaultAssignment": {
-        "group": "triage"
+        "group": "coordinators"
       },
-      "shareWith": [
-        "triage"
-      ],
       "extendedPropertyTables": [
+        "request_details",
         "incident_audit"
+      ],
+      "shareWith": [
+        "coordinators",
+        "approvers"
       ]
     }
   ],
   "extendedPropertyTables": [
+    {
+      "tableName": "request_details",
+      "tableAlias": "Request Details",
+      "relationshipType": "OneToOne",
+      "fields": [
+        {
+          "propertyName": "request_id",
+          "propertyAlias": "Request ID",
+          "dataType": "String",
+          "fieldLength": 50,
+          "required": true,
+          "editable": true
+        },
+        {
+          "propertyName": "request_type",
+          "propertyAlias": "Request Type",
+          "dataType": "String",
+          "fieldLength": 100,
+          "required": true,
+          "editable": true
+        },
+        {
+          "propertyName": "requested_by",
+          "propertyAlias": "Requested By",
+          "dataType": "String",
+          "fieldLength": 150,
+          "required": true,
+          "editable": true
+        },
+        {
+          "propertyName": "operational_area",
+          "propertyAlias": "Operational Area",
+          "dataType": "String",
+          "fieldLength": 100,
+          "required": false,
+          "editable": true
+        },
+        {
+          "propertyName": "business_justification",
+          "propertyAlias": "Business Justification",
+          "dataType": "String",
+          "fieldLength": 2000,
+          "required": true,
+          "editable": true
+        },
+        {
+          "propertyName": "priority",
+          "propertyAlias": "Requested Priority",
+          "dataType": "String",
+          "fieldLength": 30,
+          "required": false,
+          "editable": true,
+          "domain": [
+            "Low",
+            "Medium",
+            "High",
+            "Critical"
+          ]
+        },
+        {
+          "propertyName": "decision",
+          "propertyAlias": "Approval Decision",
+          "dataType": "String",
+          "fieldLength": 50,
+          "required": false,
+          "editable": true
+        },
+        {
+          "propertyName": "decision_notes",
+          "propertyAlias": "Decision Notes",
+          "dataType": "String",
+          "fieldLength": 2000,
+          "required": false,
+          "editable": true
+        },
+        {
+          "propertyName": "completion_notes",
+          "propertyAlias": "Completion Notes",
+          "dataType": "String",
+          "fieldLength": 2000,
+          "required": false,
+          "editable": true
+        }
+      ]
+    },
     {
       "tableName": "incident_audit",
       "tableAlias": "Incident Audit",
