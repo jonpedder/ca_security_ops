@@ -60,6 +60,15 @@ test('clicks inside incident triage or popup controls do not clear the selected 
   );
 });
 
+test('automatic alert refresh preserves in-progress triage form work', () => {
+  assert.match(html, /el\.dataset\.incidentId=d\?\.id\|\|''/);
+  assert.match(
+    html,
+    /if\(\$\('details'\)\.dataset\.incidentId!==\(state\.selectedId\|\|''\)\)renderDetails\(\)/,
+    'refresh must not rebuild the selected incident pane when its incident has not changed'
+  );
+});
+
 test('new triage jobs retain creation state through submission', () => {
   assert.match(
     html,
