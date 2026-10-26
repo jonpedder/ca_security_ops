@@ -25,10 +25,10 @@ test('mobile header keeps authenticated identity visible without desktop control
   assert.match(html, /\.user-identity\{min-width:0;max-width:105px;text-align:right\}/);
 });
 
-test('incident list defaults to the last 30 minutes', () => {
-  assert.match(html, /state=\{search:'',severity:\[\],category:\[\],source:\[\],hours:0\.5,/);
-  assert.match(html, /<option value="0\.5" selected>Last 30 minutes<\/option><option value="1">Last 1 hour<\/option>/);
-  assert.doesNotMatch(html, /<option value="1" selected>Last 1 hour<\/option>/);
+test('incident list uses the configured default time filter', () => {
+  assert.match(html, /state=\{search:'',severity:\[\],category:\[\],source:\[\],hours:appSettings\.filterDefaults\.incidentTimeHours,/);
+  assert.match(html, /<option value="0\.5">Last 30 minutes<\/option><option value="1">Last 1 hour<\/option>/);
+  assert.match(html, /\$\('timeFilter'\)\.value=String\(state\.hours\)/);
 });
 
 test('multi-select filters can collapse to preserve incident list space', () => {

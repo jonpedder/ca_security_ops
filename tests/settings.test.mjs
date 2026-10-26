@@ -13,6 +13,8 @@ test('settings page exposes all requested configuration sections and reset',()=>
   assert.match(settingsPage,/id="personaLabels"/);
   assert.match(settingsPage,/id="incidentIcons"/);
   assert.match(settingsPage,/id="buttonLabels"/);
+  assert.match(settingsPage,/Filter defaults/);
+  assert.match(settingsPage,/id="defaultIncidentTime"/);
   assert.match(settingsPage,/id="tickerSpeed"[^>]*><option value="300">Slow<\/option><option value="120">Medium<\/option><option value="75">Fast<\/option><option value="40">Faster<\/option><option value="0">Paused<\/option>/);
 });
 
@@ -43,6 +45,14 @@ test('main application tab labels are configurable and sections collapse by defa
   assert.match(approval,/applyTabLabels\(document,appSettings\.tabLabels\)/);
   assert.match(settingsPage,/<details class="card"><summary>Status colors<\/summary>/);
   assert.doesNotMatch(settingsPage,/<details class="card" open>/);
+});
+
+test('incident time filter default is configurable below main app tab labels',()=>{
+  assert.match(settingsModule,/filterDefaults:\{incidentTimeHours:0\.5\}/);
+  assert.match(settingsModule,/\[0\.5,1,2,4,12,24,168\]\.includes\(incidentTimeHours\)/);
+  assert.match(settingsPage,/Main app tab labels[\s\S]*Filter defaults[\s\S]*Status colors/);
+  assert.match(settingsPage,/next\.filterDefaults\.incidentTimeHours=Number\(\$\('defaultIncidentTime'\)\.value\)/);
+  assert.match(operations,/hours:appSettings\.filterDefaults\.incidentTimeHours/);
 });
 
 test('shared settings preserve immutable base defaults and versioned storage',()=>{
