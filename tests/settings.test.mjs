@@ -20,6 +20,9 @@ test('settings includes printable operator help, live screenshots, and approval 
   for(const text of ['Help &amp; How-to','How to initially triage an incident','How to use Incident Approval','Rejecting or returning incidents','Troubleshooting common approval errors','Quick reference checklist']) assert.match(settingsPage,new RegExp(text));
   assert.match(settingsPage,/id="helpPanel"/);
   assert.match(settingsPage,/id="printHelp"/);
+  assert.match(settingsPage,/id="downloadHelpPdf"/);
+  assert.match(settingsPage,/Table of contents/);
+  assert.match(settingsPage,/Page '\+page\+' of '\+total/);
   assert.match(settingsPage,/window\.print\(\)/);
   assert.match(settingsPage,/help\/operations-map-live\.png/);
   assert.match(settingsPage,/help\/incident-approval-live\.png/);

@@ -1,0 +1,66 @@
+name: Refresh help screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - approval.html
+      - settings.mjs
+      - workflow/**
+      - scripts/refresh-help-screenshots.mjs
+
+permissions:
+  contents: write
+
+concurrency:
+  group: help-screenshots
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Check screenshot credential
+        id: credential
+        env:
+          STATE: ${{ secrets.SCREENSHOT_STORAGE_STATE_B64 }}
+        run: |
+          if [ -z "$STATE" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "SCREENSHOT_STORAGE_STATE_B64 is not configured; preserving current screenshots."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install Playwright
+        if: steps.credential.outputs.configured == 'true'
+        run: npm ci && npx playwright install --with-deps chromium
+      - name: Restore authenticated browser state
+        if: steps.credential.outputs.configured == 'true'
+        env:
+          STATE: ${{ secrets.SCREENSHOT_STORAGE_STATE_B64 }}
+        run: echo "$STATE" | base64 --decode > "$RUNNER_TEMP/arcgis-storage-state.json"
+      - name: Capture deployed app
+        if: steps.credential.outputs.configured == 'true'
+        env:
+          SCREENSHOT_STORAGE_STATE: ${{ runner.temp }}/arcgis-storage-state.json
+          SCREENSHOT_BASE_URL: https://jonpedder.github.io/ca_security_ops
+        run: npm run screenshots
+      - name: Commit refreshed screenshots
+        if: steps.credential.outputs.configured == 'true'
+        run: |
+          if git diff --quiet -- help/*-live.png; then
+            echo "Screenshots are unchanged."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add help/*-live.png
+          git commit -m "Refresh live help screenshots [skip ci]"
+          git push
