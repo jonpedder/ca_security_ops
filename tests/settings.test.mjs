@@ -28,9 +28,11 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/id="helpPanel"/);
   assert.match(settingsPage,/id="printHelp"/);
   assert.match(settingsPage,/id="downloadHelpPdf"/);
-  assert.match(settingsPage,/Print this section/);
-  assert.match(settingsPage,/function printHelpSection\(id\)/);
-  assert.match(settingsPage,/print-section-hidden/);
+  assert.match(settingsPage,/Print PDF/);
+  assert.match(settingsPage,/function downloadHelpSectionPdf\(id,button\)/);
+  assert.match(settingsPage,/downloadHelpSectionPdf\(details\.id,printButton\)/);
+  assert.match(settingsPage,/mission-insights-'\+id\.replace/);
+  assert.match(settingsPage,/doc\.save\(filename\)/);
   assert.match(settingsPage,/Table of contents/);
   assert.match(settingsPage,/Page '\+page\+' of '\+total/);
   assert.match(settingsPage,/window\.print\(\)/);
