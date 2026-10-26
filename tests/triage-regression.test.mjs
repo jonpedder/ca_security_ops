@@ -26,16 +26,30 @@ test('mobile header keeps authenticated identity visible without desktop control
 });
 
 test('incident list defaults to the last 30 minutes', () => {
-  assert.match(html, /state=\{search:'',severity:\[\],category:\[\],hours:0\.5,/);
+  assert.match(html, /state=\{search:'',severity:\[\],category:\[\],source:\[\],hours:0\.5,/);
   assert.match(html, /<option value="0\.5" selected>Last 30 minutes<\/option><option value="1">Last 1 hour<\/option>/);
   assert.doesNotMatch(html, /<option value="1" selected>Last 1 hour<\/option>/);
 });
 
 test('multi-select filters can collapse to preserve incident list space', () => {
-  assert.match(html, /<details class="filter-details" id="advancedFilters"><summary>Severity and category filters<\/summary>/);
+  assert.match(html, /<details class="filter-details" id="advancedFilters"><summary>Severity, category, and source filters<\/summary>/);
   assert.match(html, /<select id="severityFilter"[^>]+multiple/);
   assert.match(html, /<select id="categoryFilter"[^>]+multiple/);
   assert.doesNotMatch(html, /<details class="filter-details" id="advancedFilters" open>/);
+});
+
+test('source filter is multi-select, data-driven, and applied to incident filtering', () => {
+  assert.match(html, /<select id="sourceFilter"[^>]+multiple/);
+  assert.match(html, /sources=\[\.\.\.new Set\(incidents\.map\(d=>d\.source\)\)\]\.sort\(\)/);
+  assert.match(html, /state\.source=state\.source\.filter\(s=>sources\.includes\(s\)\)/);
+  assert.match(html, /!state\.source\.length\|\|state\.source\.includes\(d\.source\)/);
+  assert.match(html, /\$\('sourceFilter'\)\.onchange=e=>\{state\.source=multiValues\(e\.target\)/);
+});
+
+test('app uses global rather than statewide monitoring terminology', () => {
+  assert.match(html, /Global Situational Awareness/);
+  assert.match(html, /Global monitoring active/);
+  assert.doesNotMatch(html, /Statewide|statewide/);
 });
 
 test('clicks inside incident triage or popup controls do not clear the selected incident', () => {
