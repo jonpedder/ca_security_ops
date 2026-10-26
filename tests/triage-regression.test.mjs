@@ -27,9 +27,21 @@ test('clicks inside incident triage or popup controls do not clear the selected 
 test('new triage jobs retain creation state through submission', () => {
   assert.match(
     html,
-    /createdNew=!t;if\(!t\)/,
+    /createdNew=!t;/,
     'saveTriage must define createdNew before the new-job branch uses it'
   );
+  assert.match(html, /if\(!t\)\{const body=/);
+});
+
+test('triage claims group-assigned current steps before updating a job', () => {
+  assert.match(html, /async function claimCurrentSteps\(job\)/);
+  assert.match(html, /assignedType:'User',assignedTo:state\.credential\.userId/);
+  assert.match(html, /if\(before\)await claimCurrentSteps\(before\)/);
+});
+
+test('triage only reuses jobs created from the current audited template', () => {
+  assert.match(html, /fields:\['jobId','jobName','jobStatus','priority','closed','createdDate','jobTemplateId'\]/);
+  assert.match(html, /x\.jobTemplateId===WFM_TEMPLATE/);
 });
 
 test('map popup exposes the standard dock and undock control', () => {

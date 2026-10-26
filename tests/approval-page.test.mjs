@@ -24,6 +24,15 @@ test('approval submission updates Workflow Manager and writes an audit comment',
   assert.match(approval, /An approval note is required/);
 });
 
+test('approval claims the current step before updating the job', () => {
+  assert.match(approval, /async function claimCurrentSteps\(job\)/);
+  assert.match(approval, /await claimCurrentSteps\(current\)/);
+});
+
+test('approval lists only jobs from the current audited template', () => {
+  assert.match(approval, /jobTemplateId==='FkGUEznHSqWukSFzDxeC4w'/);
+});
+
 test('approval page provides incident and active-triage PDF reports', () => {
   assert.match(approval, /src="\.\/vendor\/jspdf\.umd\.min\.js"/);
   assert.doesNotMatch(approval, /jspdf\/2\.5\.2/);
