@@ -9,6 +9,15 @@ test('application branding uses the Mission Insights title and subtitle', () => 
   assert.match(html, /<div class="brand"><h1>Mission Insights<\/h1><p>A Watch Center Integration<\/p><p class="powered-by">Powered by ArcGIS Velocity and Workflow Manager<\/p><\/div>/);
 });
 
+test('header shows the authenticated ArcGIS username and full name', () => {
+  assert.match(html, /id="authFullName"/);
+  assert.match(html, /id="authUsername"/);
+  assert.match(html, /import Portal from/);
+  assert.match(html, /user\?\.fullName\|\|username/);
+  assert.match(html, /user\?\.username\|\|username/);
+  assert.match(html, /await loadAuthenticatedUser\(\)/);
+});
+
 test('multi-select filters can collapse to preserve incident list space', () => {
   assert.match(html, /<details class="filter-details" id="advancedFilters"><summary>Severity and category filters<\/summary>/);
   assert.match(html, /<select id="severityFilter"[^>]+multiple/);
