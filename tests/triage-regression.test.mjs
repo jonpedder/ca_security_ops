@@ -52,16 +52,18 @@ test('triage only reuses jobs created from the current audited template', () => 
   assert.match(html, /x\.jobTemplateId===WFM_TEMPLATE/);
 });
 
-test('new records entering the incident list are submitted to the triage queue', () => {
-  assert.match(html, /newIncidents=state\.seenAlertIds\?incidents\.filter/);
-  assert.match(html, /queueSubmittedIncidents\(newIncidents\)/);
-  assert.match(html, /async function createSubmittedTriage\(d\)/);
-  assert.match(html, /jobStatus:'Submitted'/);
-  assert.match(html, /Automatically submitted when the alert entered the incident list/);
+test('alerts enter the triage queue only through explicit operations-map triage', () => {
+  assert.doesNotMatch(html, /queueSubmittedIncidents\(newIncidents\)/);
+  assert.doesNotMatch(html, /newIncidents=state\.seenAlertIds/);
+  assert.match(html, /\$\('saveTriage'\)\.onclick=\(\)=>coordinateIncidentMutation\(d\.id,\(\)=>saveTriage\(d\)\)/);
+  assert.match(html, /if\(!t\)\{const body=\{numberOfJobs:1/);
+  assert.doesNotMatch(html, /queueSubmittedIncidents\(newIncidents\)/);
 });
 
-test('initial page load does not backfill every visible alert as a new submission', () => {
-  assert.match(html, /newIncidents=state\.seenAlertIds\?incidents\.filter\(d=>!state\.seenAlertIds\.has\(d\.id\)\):\[\]/);
+test('alert refresh never creates Workflow Manager jobs', () => {
+  const loadAlerts = html.match(/async function loadAlerts\(force=false\)\{[\s\S]*?function updateCountdown/)?.[0] || '';
+  assert.ok(loadAlerts, 'loadAlerts function should be present');
+  assert.doesNotMatch(loadAlerts, /jobTemplates|createSubmittedTriage|queueSubmittedIncidents/);
 });
 
 test('map popup exposes the standard dock and undock control', () => {
