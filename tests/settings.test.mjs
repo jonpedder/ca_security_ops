@@ -18,6 +18,11 @@ test('settings page exposes all requested configuration sections and reset',()=>
   assert.match(settingsPage,/id="tickerSpeed"[^>]*><option value="300">Slow<\/option><option value="120">Medium<\/option><option value="75">Fast<\/option><option value="40">Faster<\/option><option value="0">Paused<\/option>/);
 });
 
+test('settings page has one clean document ending without rendered code remnants',()=>{
+  assert.equal((settingsPage.match(/<\/script><\/body><\/html>/g)||[]).length,1);
+  assert.ok(settingsPage.trimEnd().endsWith('</script></body></html>'));
+});
+
 test('settings includes printable operator help, live screenshots, and approval guidance',()=>{
   for(const text of ['Help &amp; How-to','How to initially triage an incident','How to use Incident Approval','Rejecting or returning incidents','Troubleshooting common approval errors','Quick reference checklist']) assert.match(settingsPage,new RegExp(text));
   assert.match(settingsPage,/id="helpPanel"/);
