@@ -16,6 +16,14 @@ test('settings page exposes all requested configuration sections and reset',()=>
   assert.match(settingsPage,/id="tickerSpeed"[^>]*><option value="300">Slow<\/option><option value="120">Medium<\/option><option value="75">Fast<\/option><option value="40">Faster<\/option><option value="0">Paused<\/option>/);
 });
 
+test('settings includes an operator help tab with triage and approval guidance',()=>{
+  for(const text of ['Help &amp; How-to','How to initially triage an incident','How to use Incident Approval','Approval decision outcomes','Quick reference checklist']) assert.match(settingsPage,new RegExp(text));
+  assert.match(settingsPage,/id="helpPanel"/);
+  assert.match(settingsPage,/help\/operations-map\.svg/);
+  assert.match(settingsPage,/help\/triage-panel\.svg/);
+  assert.match(settingsPage,/help\/incident-approval\.svg/);
+});
+
 test('shared settings preserve immutable base defaults and versioned storage',()=>{
   assert.match(settingsModule,/export const BASE_DEFAULTS=deepFreeze/);
   assert.match(settingsModule,/version:1/);
