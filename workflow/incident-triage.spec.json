@@ -1,34 +1,103 @@
 {
-  "$comment": "Dedicated Workflow Manager item for Watch Center incident triage. The dashboard creates one job per alert ID. Native Workflow Manager job priority, status, comments, assignments, step history, and job history are the authoritative audit trail.",
+  "$comment": "Dedicated Workflow Manager item for Watch Center incident triage. The incident_triage extended-property table stores source incident context and the latest structured audit event; native Workflow Manager comments and history remain the append-only authoritative trail.",
   "workflowItem": {
-    "title": "Watch Center Incident Triage",
+    "title": "Watch Center Incident Triage Audited",
     "description": "Authoritative incident triage and audit history for California Security Operations Watch Center alerts. Uses native Workflow Manager priority, status, comments, assignments, and history so every action is attributable and reportable."
   },
   "category": "Security Operations",
-  "intake": { "type": "application" },
+  "intake": {
+    "type": "application"
+  },
   "groups": {
     "triage": {
       "title": "Watch Center Incident Triage - Analysts",
       "description": "Analysts authorized to triage Watch Center incidents and review their audit history.",
-      "roles": ["Manage Jobs - Basic", "Manage Jobs - Advanced"]
+      "roles": [
+        "Manage Jobs - Basic",
+        "Manage Jobs - Advanced"
+      ]
     }
   },
   "lookups": {
     "priority": [
-      { "lookupName": "Low", "value": 1 },
-      { "lookupName": "Medium", "value": 2 },
-      { "lookupName": "High", "value": 3 },
-      { "lookupName": "Critical", "value": 4 }
+      {
+        "lookupName": "Low",
+        "value": 1
+      },
+      {
+        "lookupName": "Medium",
+        "value": 2
+      },
+      {
+        "lookupName": "High",
+        "value": 3
+      },
+      {
+        "lookupName": "Critical",
+        "value": 4
+      }
     ],
     "status": [
-      { "lookupName": "Created", "value": 1 }, { "lookupName": "Ready", "value": 2 },
-      { "lookupName": "In Progress", "value": 3 }, { "lookupName": "Incomplete", "value": 4 },
-      { "lookupName": "Revised", "value": 5 }, { "lookupName": "Pending", "value": 6 },
-      { "lookupName": "On Hold", "value": 7 }, { "lookupName": "Approved", "value": 8 },
-      { "lookupName": "Completed", "value": 9 }, { "lookupName": "Closed", "value": 10 },
-      { "lookupName": "New", "value": 11 }, { "lookupName": "Acknowledged", "value": 12 },
-      { "lookupName": "Investigating", "value": 13 }, { "lookupName": "Monitoring", "value": 14 },
-      { "lookupName": "Resolved", "value": 15 }
+      {
+        "lookupName": "Created",
+        "value": 1
+      },
+      {
+        "lookupName": "Ready",
+        "value": 2
+      },
+      {
+        "lookupName": "In Progress",
+        "value": 3
+      },
+      {
+        "lookupName": "Incomplete",
+        "value": 4
+      },
+      {
+        "lookupName": "Revised",
+        "value": 5
+      },
+      {
+        "lookupName": "Pending",
+        "value": 6
+      },
+      {
+        "lookupName": "On Hold",
+        "value": 7
+      },
+      {
+        "lookupName": "Approved",
+        "value": 8
+      },
+      {
+        "lookupName": "Completed",
+        "value": 9
+      },
+      {
+        "lookupName": "Closed",
+        "value": 10
+      },
+      {
+        "lookupName": "New",
+        "value": 11
+      },
+      {
+        "lookupName": "Acknowledged",
+        "value": 12
+      },
+      {
+        "lookupName": "Investigating",
+        "value": 13
+      },
+      {
+        "lookupName": "Monitoring",
+        "value": 14
+      },
+      {
+        "lookupName": "Resolved",
+        "value": 15
+      }
     ]
   },
   "diagram": {
@@ -36,27 +105,210 @@
     "description": "Incident intake, active analyst triage, resolution review, optional return to investigation, and audited closure.",
     "initialStep": "incident-intake",
     "steps": [
-      { "key": "incident-intake", "name": "Incident Received", "kind": "startEnd", "at": { "x": 0, "y": 0 }, "prompt": "A Watch Center incident has been registered. Proceed to analyst triage." },
-      { "key": "active-triage", "name": "Active Triage", "kind": "manual", "at": { "x": 220, "y": 0 }, "group": "triage", "userRun": true, "canComment": true, "prompt": "Review the incident, change its Workflow Manager priority and status, and append comments. Continue when it is ready for resolution review." },
-      { "key": "resolution-review", "name": "Resolution Review", "kind": "question", "at": { "x": 440, "y": 0 }, "group": "triage", "question": "Is this incident ready to close?", "responses": [ { "key": "Close", "value": 1 }, { "key": "ReturnToTriage", "value": 0 } ] },
-      { "key": "incident-closed", "name": "Incident Closed", "kind": "startEnd", "at": { "x": 660, "y": 0 }, "group": "triage", "prompt": "Confirm final disposition and close the incident job. Native Workflow Manager history and comments remain available for audit reporting." }
+      {
+        "key": "incident-intake",
+        "name": "Incident Received",
+        "kind": "startEnd",
+        "at": {
+          "x": 0,
+          "y": 0
+        },
+        "prompt": "A Watch Center incident has been registered. Proceed to analyst triage."
+      },
+      {
+        "key": "active-triage",
+        "name": "Active Triage",
+        "kind": "manual",
+        "at": {
+          "x": 220,
+          "y": 0
+        },
+        "group": "triage",
+        "userRun": true,
+        "canComment": true,
+        "prompt": "Review the incident, change its Workflow Manager priority and status, and append comments. Continue when it is ready for resolution review."
+      },
+      {
+        "key": "resolution-review",
+        "name": "Resolution Review",
+        "kind": "question",
+        "at": {
+          "x": 440,
+          "y": 0
+        },
+        "group": "triage",
+        "question": "Is this incident ready to close?",
+        "responses": [
+          {
+            "key": "Close",
+            "value": 1
+          },
+          {
+            "key": "ReturnToTriage",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "key": "incident-closed",
+        "name": "Incident Closed",
+        "kind": "startEnd",
+        "at": {
+          "x": 660,
+          "y": 0
+        },
+        "group": "triage",
+        "prompt": "Confirm final disposition and close the incident job. Native Workflow Manager history and comments remain available for audit reporting."
+      }
     ],
     "paths": [
-      { "from": "incident-intake", "to": "active-triage" },
-      { "from": "active-triage", "to": "resolution-review" },
-      { "from": "resolution-review", "to": "incident-closed", "answer": 1 },
-      { "from": "resolution-review", "to": "active-triage", "answer": 0, "ports": ["TOP", "TOP"] }
+      {
+        "from": "incident-intake",
+        "to": "active-triage"
+      },
+      {
+        "from": "active-triage",
+        "to": "resolution-review"
+      },
+      {
+        "from": "resolution-review",
+        "to": "incident-closed",
+        "answer": 1
+      },
+      {
+        "from": "resolution-review",
+        "to": "active-triage",
+        "answer": 0,
+        "ports": [
+          "TOP",
+          "TOP"
+        ]
+      }
     ]
   },
   "jobTemplates": [
     {
-      "name": "Watch Center Incident",
-      "description": "Creates one auditable Workflow Manager job per Watch Center alert. The alert ID is stored in the job name and the source details in its description; native job history and comments provide the full audit record.",
+      "name": "Watch Center Incident Audited",
+      "description": "Creates one auditable Workflow Manager job per Watch Center alert. Incident context and latest audit state are stored in the incident_triage extended-property table; native comments and history retain the append-only event trail.",
       "defaultPriority": "Medium",
       "defaultJobName": "WATCH_[index]",
       "defaultJobDuration": 7,
-      "defaultAssignment": { "group": "triage" },
-      "shareWith": ["triage"]
+      "defaultAssignment": {
+        "group": "triage"
+      },
+      "shareWith": [
+        "triage"
+      ],
+      "extendedPropertyTables": [
+        "incident_audit"
+      ]
+    }
+  ],
+  "extendedPropertyTables": [
+    {
+      "tableName": "incident_audit",
+      "tableAlias": "Incident Audit",
+      "relationshipType": "OneToOne",
+      "fields": [
+        {
+          "propertyName": "alert_id",
+          "propertyAlias": "Alert ID",
+          "dataType": "String",
+          "fieldLength": 100,
+          "editable": true
+        },
+        {
+          "propertyName": "alert_name",
+          "propertyAlias": "Incident name",
+          "dataType": "String",
+          "fieldLength": 255,
+          "editable": true
+        },
+        {
+          "propertyName": "alert_type",
+          "propertyAlias": "Incident type",
+          "dataType": "String",
+          "fieldLength": 100,
+          "editable": true
+        },
+        {
+          "propertyName": "alert_source",
+          "propertyAlias": "Alert source",
+          "dataType": "String",
+          "fieldLength": 150,
+          "editable": true
+        },
+        {
+          "propertyName": "alert_location",
+          "propertyAlias": "Alert location",
+          "dataType": "String",
+          "fieldLength": 255,
+          "editable": true
+        },
+        {
+          "propertyName": "watch_area",
+          "propertyAlias": "Watch area",
+          "dataType": "String",
+          "fieldLength": 255,
+          "editable": true
+        },
+        {
+          "propertyName": "original_priority",
+          "propertyAlias": "Original priority",
+          "dataType": "String",
+          "fieldLength": 20,
+          "editable": true
+        },
+        {
+          "propertyName": "event_type",
+          "propertyAlias": "Latest audit event",
+          "dataType": "String",
+          "fieldLength": 100,
+          "editable": true
+        },
+        {
+          "propertyName": "field_name",
+          "propertyAlias": "Latest changed field",
+          "dataType": "String",
+          "fieldLength": 100,
+          "editable": true
+        },
+        {
+          "propertyName": "previous_value",
+          "propertyAlias": "Previous value",
+          "dataType": "String",
+          "fieldLength": 255,
+          "editable": true
+        },
+        {
+          "propertyName": "new_value",
+          "propertyAlias": "New value",
+          "dataType": "String",
+          "fieldLength": 255,
+          "editable": true
+        },
+        {
+          "propertyName": "event_note",
+          "propertyAlias": "Latest audit note",
+          "dataType": "String",
+          "fieldLength": 1000,
+          "editable": true
+        },
+        {
+          "propertyName": "action_by",
+          "propertyAlias": "Latest action by",
+          "dataType": "String",
+          "fieldLength": 255,
+          "editable": true
+        },
+        {
+          "propertyName": "action_at",
+          "propertyAlias": "Latest action at",
+          "dataType": "String",
+          "fieldLength": 50,
+          "editable": true
+        }
+      ]
     }
   ]
 }
