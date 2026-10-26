@@ -18,6 +18,13 @@ test('header shows the authenticated ArcGIS username and full name', () => {
   assert.match(html, /await loadAuthenticatedUser\(\)/);
 });
 
+test('mobile header keeps authenticated identity visible without desktop controls', () => {
+  assert.match(html, /grid-template-columns:32px minmax\(90px,1fr\) 105px 62px/);
+  assert.match(html, /\.status-row\{display:contents\}/);
+  assert.match(html, /\.clocks,\.badge,\.brief-btn,\.health,\.status-row>a\{display:none\}/);
+  assert.match(html, /\.user-identity\{min-width:0;max-width:105px;text-align:right\}/);
+});
+
 test('multi-select filters can collapse to preserve incident list space', () => {
   assert.match(html, /<details class="filter-details" id="advancedFilters"><summary>Severity and category filters<\/summary>/);
   assert.match(html, /<select id="severityFilter"[^>]+multiple/);
