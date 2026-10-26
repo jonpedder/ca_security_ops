@@ -25,6 +25,12 @@ test('mobile header keeps authenticated identity visible without desktop control
   assert.match(html, /\.user-identity\{min-width:0;max-width:105px;text-align:right\}/);
 });
 
+test('incident list defaults to the last 30 minutes', () => {
+  assert.match(html, /state=\{search:'',severity:\[\],category:\[\],hours:0\.5,/);
+  assert.match(html, /<option value="0\.5" selected>Last 30 minutes<\/option><option value="1">Last 1 hour<\/option>/);
+  assert.doesNotMatch(html, /<option value="1" selected>Last 1 hour<\/option>/);
+});
+
 test('multi-select filters can collapse to preserve incident list space', () => {
   assert.match(html, /<details class="filter-details" id="advancedFilters"><summary>Severity and category filters<\/summary>/);
   assert.match(html, /<select id="severityFilter"[^>]+multiple/);
