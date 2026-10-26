@@ -28,10 +28,16 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/help\/incident-approval-live\.png/);
 });
 
-test('settings tab labels are configurable and sections collapse by default',()=>{
-  assert.match(settingsModule,/tabLabels:\{configuration:'Configuration',help:'Help & How-to'\}/);
+test('main application tab labels are configurable and sections collapse by default',()=>{
+  assert.match(settingsModule,/tabLabels:\{operationsMap:'Operations Map',incidentApproval:'Incident Approval'\}/);
+  assert.match(settingsModule,/export function applyTabLabels/);
+  assert.match(settingsPage,/Main app tab labels/);
   assert.match(settingsPage,/id="tabLabels"/);
   assert.match(settingsPage,/data-tab-label/);
+  assert.match(operations,/data-main-tab-key="incidentApproval"/);
+  assert.match(approval,/data-main-tab-key="operationsMap"/);
+  assert.match(operations,/applyTabLabels\(document,appSettings\.tabLabels\)/);
+  assert.match(approval,/applyTabLabels\(document,appSettings\.tabLabels\)/);
   assert.match(settingsPage,/<details class="card"><summary>Status colors<\/summary>/);
   assert.doesNotMatch(settingsPage,/<details class="card" open>/);
 });

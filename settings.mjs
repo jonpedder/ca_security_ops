@@ -5,9 +5,9 @@ const defaults={
   version:1,
   statusColors:{Submitted:'#8b9bab',New:'#8796a0',Ready:'#6574cd','In Progress':'#f28c28',Investigating:'#f28c28',Monitoring:'#f2c94c',Pending:'#f2c94c','On Hold':'#d9364f',Revised:'#d9364f',Approved:'#36b37e',Completed:'#36b37e',Closed:'#607d8b',Resolved:'#36b37e',Unknown:'#8796a0'},
   personaLabels:{all:'All personas',triage:'Triage Analyst',approver:'Approver',command:'Watch Commander'},
-  tabLabels:{configuration:'Configuration',help:'Help & How-to'},
+  tabLabels:{operationsMap:'Operations Map',incidentApproval:'Incident Approval'},
   incidentIcons:{Weather:{style:'original',url:''},Fire:{style:'original',url:''},Flood:{style:'original',url:''},Infrastructure:{style:'original',url:''},Traffic:{style:'original',url:''},Medical:{style:'original',url:''},Security:{style:'original',url:''},Earthquake:{style:'original',url:''},Hazmat:{style:'original',url:''},Other:{style:'original',url:''}},
-  labels:{settings:'Settings',signIn:'Sign in with ArcGIS',signOut:'Sign out',operationalBrief:'Operational Brief',incidentApproval:'Incident Approval',zoom:'Zoom',source:'Source',updateIncident:'Update incident',auditTrail:'Audit trail',incidentPdf:'Incident PDF',pdfReport:'PDF report',exportCsv:'Export CSV',exportJson:'Export JSON',operationsMap:'Operations Map',triagePdf:'Triage PDF',refresh:'Refresh',recordDecision:'Record decision',reload:'Reload',drawerOpen:'Open',drawerClose:'Close',expand:'Expand',collapse:'Collapse',fullscreen:'Fullscreen',exitFullscreen:'Exit full screen'},
+  labels:{settings:'Settings',signIn:'Sign in with ArcGIS',signOut:'Sign out',operationalBrief:'Operational Brief',zoom:'Zoom',source:'Source',updateIncident:'Update incident',auditTrail:'Audit trail',incidentPdf:'Incident PDF',pdfReport:'PDF report',exportCsv:'Export CSV',exportJson:'Export JSON',triagePdf:'Triage PDF',refresh:'Refresh',recordDecision:'Record decision',reload:'Reload',drawerOpen:'Open',drawerClose:'Close',expand:'Expand',collapse:'Collapse',fullscreen:'Fullscreen',exitFullscreen:'Exit full screen'},
   tickerSpeed:300,
   refreshMs:30000
 };
@@ -26,4 +26,5 @@ export function saveSettings(candidate){const checked=validateSettings(candidate
 export function resetSettings(){localStorage.removeItem(STORAGE_KEY);const value=clone(BASE_DEFAULTS);window.dispatchEvent(new CustomEvent(CHANGE_EVENT,{detail:value}));return value}
 export function subscribeSettings(callback){const custom=e=>callback(e.detail||loadSettings()),storage=e=>{if(e.key===STORAGE_KEY)callback(loadSettings())};window.addEventListener(CHANGE_EVENT,custom);window.addEventListener('storage',storage);return()=>{window.removeEventListener(CHANGE_EVENT,custom);window.removeEventListener('storage',storage)}}
 export function applyLabels(root,labels){root.querySelectorAll('[data-label-key]').forEach(el=>{const text=labels[el.dataset.labelKey];if(text)el.textContent=text})}
+export function applyTabLabels(root,tabLabels){root.querySelectorAll('[data-main-tab-key]').forEach(el=>{const text=tabLabels[el.dataset.mainTabKey];if(text)el.textContent=text})}
 export function statusColor(settings,status){return settings.statusColors[status]||settings.statusColors.Unknown}
