@@ -4,9 +4,11 @@ import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
 
-test('application branding uses the Mission Insights title and subtitle', () => {
+test('application branding uses configurable app name, subtitle, and logo', () => {
   assert.match(html, /<title>Mission Insights<\/title>/);
-  assert.match(html, /<div class="brand"><h1>Mission Insights<\/h1><p>A Watch Center Integration<\/p><p class="powered-by">Powered by ArcGIS Velocity and Workflow Manager<\/p><\/div>/);
+  assert.match(html, /data-branding="appName">Mission Insights<\/h1><p data-branding="subtitle">A Watch Center Integration<\/p>/);
+  assert.match(html, /data-branding-logo/);
+  assert.match(html, /applyBranding\(document,appSettings\.branding\)/);
 });
 
 test('header shows the authenticated ArcGIS username and full name', () => {

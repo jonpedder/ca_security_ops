@@ -54,6 +54,17 @@ test('main application tab labels are configurable and sections collapse by defa
   assert.doesNotMatch(settingsPage,/<details class="card" open>/);
 });
 
+test('app branding is configurable below settings templates',()=>{
+  assert.match(settingsModule,/branding:\{appName:'Mission Insights',subtitle:'A Watch Center Integration',logoUrl:''\}/);
+  assert.match(settingsModule,/export function applyBranding/);
+  assert.match(settingsPage,/Settings templates[\s\S]*App branding[\s\S]*Main app tab labels/);
+  for(const id of ['brandingAppName','brandingSubtitle','brandingLogoUrl','brandingLogoUpload','brandingLogoPreview']) assert.match(settingsPage,new RegExp('id="'+id+'"'));
+  assert.match(settingsPage,/Uploaded logos must be 300 KB or smaller/);
+  assert.match(settingsPage,/accept="image\/png,image\/jpeg,image\/gif,image\/webp"/);
+  assert.match(operations,/applyBranding\(document,appSettings\.branding\)/);
+  assert.match(approval,/applyBranding\(document,appSettings\.branding\)/);
+});
+
 test('incident time filter default is configurable below main app tab labels',()=>{
   assert.match(settingsModule,/filterDefaults:\{incidentTimeHours:0\.5\}/);
   assert.match(settingsModule,/\[0\.5,1,2,4,12,24,168\]\.includes\(incidentTimeHours\)/);
