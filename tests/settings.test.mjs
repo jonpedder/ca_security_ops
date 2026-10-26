@@ -16,12 +16,21 @@ test('settings page exposes all requested configuration sections and reset',()=>
   assert.match(settingsPage,/id="tickerSpeed"[^>]*><option value="300">Slow<\/option><option value="120">Medium<\/option><option value="75">Fast<\/option><option value="40">Faster<\/option><option value="0">Paused<\/option>/);
 });
 
-test('settings includes an operator help tab with triage and approval guidance',()=>{
-  for(const text of ['Help &amp; How-to','How to initially triage an incident','How to use Incident Approval','Approval decision outcomes','Quick reference checklist']) assert.match(settingsPage,new RegExp(text));
+test('settings includes printable operator help, live screenshots, and approval guidance',()=>{
+  for(const text of ['Help &amp; How-to','How to initially triage an incident','How to use Incident Approval','Rejecting or returning incidents','Troubleshooting common approval errors','Quick reference checklist']) assert.match(settingsPage,new RegExp(text));
   assert.match(settingsPage,/id="helpPanel"/);
-  assert.match(settingsPage,/help\/operations-map\.svg/);
-  assert.match(settingsPage,/help\/triage-panel\.svg/);
-  assert.match(settingsPage,/help\/incident-approval\.svg/);
+  assert.match(settingsPage,/id="printHelp"/);
+  assert.match(settingsPage,/window\.print\(\)/);
+  assert.match(settingsPage,/help\/operations-map-live\.png/);
+  assert.match(settingsPage,/help\/incident-approval-live\.png/);
+});
+
+test('settings tab labels are configurable and sections collapse by default',()=>{
+  assert.match(settingsModule,/tabLabels:\{configuration:'Configuration',help:'Help & How-to'\}/);
+  assert.match(settingsPage,/id="tabLabels"/);
+  assert.match(settingsPage,/data-tab-label/);
+  assert.match(settingsPage,/<details class="card"><summary>Status colors<\/summary>/);
+  assert.doesNotMatch(settingsPage,/<details class="card" open>/);
 });
 
 test('shared settings preserve immutable base defaults and versioned storage',()=>{
