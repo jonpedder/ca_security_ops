@@ -67,6 +67,11 @@ test('app branding is configurable below settings templates',()=>{
   assert.match(settingsPage,/function updateBrandingDraftPreview\(\)/);
   assert.match(settingsPage,/id="brandingColors"/);
   assert.match(settingsPage,/id="brandingBasemap"/);
+  assert.match(settingsPage,/id="basemapThumbnail"/);
+  assert.match(settingsPage,/id="basemapThumbnailCaption"/);
+  assert.match(settingsPage,/function updateBasemapThumbnail\(\)/);
+  assert.match(settingsPage,/brandingBasemap'\)\.onchange=updateBasemapThumbnail/);
+  assert.match(settingsPage,/services\.arcgisonline\.com\/ArcGIS\/rest\/services/);
   assert.match(settingsPage,/Web map default/);
   assert.match(settingsPage,/Imagery with labels/);
   assert.match(settingsModule,/basemap:'webmap'/);
