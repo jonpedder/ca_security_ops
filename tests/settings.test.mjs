@@ -78,12 +78,13 @@ test('app branding is configurable below settings templates',()=>{
   assert.match(settingsPage,/id="basemapThumbnail"/);
   assert.match(settingsPage,/id="basemapThumbnailCaption"/);
   assert.match(settingsPage,/function updateBasemapThumbnail\(\)/);
-  assert.match(settingsPage,/let basemapPreviewRequest=0/);
-  assert.match(settingsPage,/preload\.onload=/);
-  assert.match(settingsPage,/request!==basemapPreviewRequest/);
-  assert.match(settingsPage,/data-basemap="hybrid"/);
+  assert.match(settingsPage,/function basemapExampleSvg\(id,label\)/);
+  assert.match(settingsPage,/data:image\/svg\+xml/);
+  assert.match(settingsPage,/Illustrative '\+label\+' basemap example/);
+  assert.match(settingsPage,/illustrative style example, not a live map/);
   assert.match(settingsPage,/brandingBasemap'\)\.onchange=updateBasemapThumbnail/);
-  assert.match(settingsPage,/services\.arcgisonline\.com\/ArcGIS\/rest\/services/);
+  assert.doesNotMatch(settingsPage,/services\.arcgisonline\.com\/ArcGIS\/rest\/services/);
+  assert.doesNotMatch(settingsPage,/tile\.openstreetmap\.org/);
   assert.match(settingsPage,/Web map default/);
   assert.match(settingsPage,/Imagery with labels/);
   assert.match(settingsModule,/basemap:'webmap'/);
