@@ -94,6 +94,10 @@ test('app branding is configurable below settings templates',async()=>{
   }
   assert.match(settingsPage,/Illustrative saved Web Map style icon/);
   assert.match(settingsPage,/\.\/assets\/basemaps\//);
+  assert.match(settingsPage,/img\.onload=\(\)=>/);
+  assert.match(settingsPage,/img\.onerror=\(\)=>/);
+  assert.match(settingsPage,/preview unavailable/);
+  assert.match(settingsPage,/\.basemap-thumb \[hidden\]\{display:none!important\}/);
   assert.match(settingsPage,/Illustrative '\+label\+' basemap example/);
   assert.match(settingsPage,/illustrative style example, not a live map/);
   assert.match(settingsPage,/brandingBasemap'\)\.onchange=updateBasemapThumbnail/);
