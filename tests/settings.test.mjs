@@ -88,6 +88,22 @@ test('app branding is configurable below settings templates',()=>{
   assert.match(approval,/applyBranding\(document,appSettings\.branding\)/);
 });
 
+test('severity colors are configurable and applied across operations and approval',()=>{
+  assert.match(settingsModule,/severityColors:\{Critical:'#d9364f',High:'#f28c28',Medium:'#f2c94c',Low:'#36b37e',Unknown:'#8796a0'\}/);
+  assert.match(settingsModule,/Object\.entries\(input\.severityColors\|\|\{\}\)/);
+  assert.match(settingsPage,/Status colors[\s\S]*Severity Colors[\s\S]*Triage persona names/);
+  assert.match(settingsPage,/id="severityColors"/);
+  assert.match(settingsPage,/data-severity-color/);
+  assert.match(settingsPage,/next\.severityColors\[e\.dataset\.severity\]=e\.value/);
+  assert.match(operations,/let colors=appSettings\.severityColors/);
+  assert.match(operations,/Object\.assign\(colors,appSettings\.severityColors\)/);
+  assert.match(operations,/--c:'\+colors\[x\]/);
+  assert.match(operations,/--sev:'\+colors\[d\.severity\]/);
+  assert.match(approval,/severityColor=s=>appSettings\.severityColors\[s\]/);
+  assert.match(approval,/class="control severity-control"/);
+  assert.match(approval,/paintPriority/);
+});
+
 test('incident time filter default is configurable below main app tab labels',()=>{
   assert.match(settingsModule,/filterDefaults:\{incidentTimeHours:0\.5\}/);
   assert.match(settingsModule,/\[0\.5,1,2,4,12,24,168\]\.includes\(incidentTimeHours\)/);
