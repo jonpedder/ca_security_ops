@@ -38,7 +38,8 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/PDF download is unavailable\. Please reload the app and try again/);
   assert.match(settingsPage,/Unable to download this help PDF:/);
   assert.doesNotMatch(settingsPage,/Open the browser print dialog/);
-  assert.match(settingsPage,/mission-insights-'\+id\.replace/);
+  assert.match(settingsPage,/const filename=title\.replace/);
+  assert.match(settingsPage,/replace\(\/\^-\|-\$\/g,''\)\.toLowerCase\(\)\+'\.pdf'/);
   assert.match(settingsPage,/id="pdfDownloadStatus"/);
   assert.match(settingsPage,/function savePdfDownload\(doc,filename\)/);
   assert.match(settingsPage,/link\.download=filename/);
