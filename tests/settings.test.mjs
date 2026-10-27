@@ -55,7 +55,7 @@ test('main application tab labels are configurable and sections collapse by defa
 });
 
 test('app branding is configurable below settings templates',()=>{
-  assert.match(settingsModule,/branding:\{appName:'Mission Insights',subtitle:'A Watch Center Integration',logoUrl:''\}/);
+  assert.match(settingsModule,/branding:\{appName:'Mission Insights',subtitle:'A Watch Center Integration',logoUrl:'',colors:/);
   assert.match(settingsModule,/export function applyBranding/);
   assert.match(settingsPage,/Settings templates[\s\S]*App branding[\s\S]*Main app tab labels/);
   for(const id of ['brandingAppName','brandingSubtitle','brandingLogoUrl','brandingLogoUpload','brandingLogoPreview']) assert.match(settingsPage,new RegExp('id="'+id+'"'));
@@ -65,6 +65,11 @@ test('app branding is configurable below settings templates',()=>{
   assert.match(settingsPage,/Live header previews/);
   for(const label of ['Operations Map','Incident Approval','Settings']) assert.match(settingsPage,new RegExp('branding-preview-label">'+label));
   assert.match(settingsPage,/function updateBrandingDraftPreview\(\)/);
+  assert.match(settingsPage,/id="brandingColors"/);
+  assert.match(settingsPage,/Theme colors/);
+  assert.match(settingsPage,/data-branding-color/);
+  for(const color of ['Header','Page background','Panel','Panel alternate','Accent and buttons','Primary text','Muted text','Borders']) assert.match(settingsPage,new RegExp(color));
+  assert.match(settingsModule,/style\.setProperty\(cssVar,colors\[key\]\)/);
   assert.match(settingsPage,/brandingAppName'\)\.oninput=updateBrandingDraftPreview/);
   assert.match(settingsPage,/brandingSubtitle'\)\.oninput=updateBrandingDraftPreview/);
   assert.match(operations,/applyBranding\(document,appSettings\.branding\)/);
