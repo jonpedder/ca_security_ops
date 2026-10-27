@@ -55,4 +55,7 @@ test('approval page provides incident and active-triage PDF reports', () => {
   assert.match(approval, /function exportAllTriagePdf/);
   assert.match(approval, /!j\.closed&&!\['Completed','Closed','Resolved'\]\.includes\(j\.jobStatus\)/);
   assert.match(approval, /Triage and Approval History/);
+  assert.match(approval, /const severityLine=\(label,value\)=>/);
+  assert.match(approval, /const color=severityColor\(value\)/);
+  assert.match(approval, /p\.severityLine\('Priority',j\.priority\|\|'Unknown'\)/);
 });

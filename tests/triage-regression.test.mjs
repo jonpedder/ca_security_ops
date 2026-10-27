@@ -144,6 +144,9 @@ test('operations-map triage pane provides a single-incident PDF report', () => {
   assert.match(html, /id="triagePdfBtn"/);
   assert.match(html, /function exportIncidentTriagePdf/);
   assert.match(html, /state\.audit=await auditData\(d\);await exportAuditPdf\(\)/);
+  assert.match(html, /const severityLine=\(label,value,suffix=''\)=>/);
+  assert.match(html, /const color=colors\[value\]\|\|colors\.Unknown/);
+  assert.match(html, /severityLine\('Current priority',a\.job\.priority/);
   assert.match(html, /src="\.\/vendor\/jspdf\.umd\.min\.js"/);
 });
 
