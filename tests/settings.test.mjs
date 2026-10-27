@@ -33,6 +33,7 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/const downloadIcon='<svg/);
   assert.match(settingsPage,/section-print download-pdf/);
   assert.match(settingsPage,/function downloadHelpSectionPdf\(id,button\)/);
+  assert.match(settingsPage,/details\.open=false/);
   assert.match(settingsPage,/summary\.append\(printButton\)/);
   assert.match(settingsPage,/event\.preventDefault\(\);event\.stopPropagation\(\)/);
   assert.match(settingsPage,/downloadHelpSectionPdf\(details\.id,printButton\)/);
