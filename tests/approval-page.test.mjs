@@ -31,6 +31,12 @@ test('triage queue shows watch area and location followed by description', () =>
   assert.match(approval, /incident_audit\.alert_location/);
   assert.match(approval, /class="job-title">'\+esc\(i\.area\)\+' · '\+esc\(i\.location\)/);
   assert.match(approval, /class="job-description">'\+esc\(i\.description\)/);
+  assert.match(approval, /\.job-description\{[^}]*-webkit-line-clamp:2[^}]*line-clamp:2/);
+  assert.match(approval, /id="watchArea"[^>]*aria-label="Filter by watch area"/);
+  assert.match(approval, /id="location"[^>]*aria-label="Filter by location"/);
+  assert.match(approval, /function updateQueueFilters\(\)/);
+  assert.match(approval, /!watchArea\|\|i\.area===watchArea/);
+  assert.match(approval, /!location\|\|i\.location===location/);
   assert.doesNotMatch(approval, /class="job-title">'\+esc\(String\(j\.jobName\)/);
 });
 
