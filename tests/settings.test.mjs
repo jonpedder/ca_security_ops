@@ -8,7 +8,7 @@ const operations=await readFile(new URL('../index.html',import.meta.url),'utf8')
 const approval=await readFile(new URL('../approval.html',import.meta.url),'utf8');
 
 test('settings page exposes all requested configuration sections and reset',()=>{
-  for(const text of ['Status colors','Triage persona names','Incident icons','Button labels','Timing','Reset to base defaults']) assert.match(settingsPage,new RegExp(text));
+  for(const text of ['Status colors','Triage persona names','Incident icons','Button labels','Timing','Apply for review','Save settings','Reset to base defaults']) assert.match(settingsPage,new RegExp(text));
   assert.match(settingsPage,/id="statusColors"/);
   assert.match(settingsPage,/id="personaLabels"/);
   assert.match(settingsPage,/id="incidentIcons"/);
@@ -124,6 +124,13 @@ test('shared settings preserve immutable base defaults and versioned storage',()
   assert.match(settingsModule,/export const BASE_DEFAULTS=deepFreeze/);
   assert.match(settingsModule,/version:1/);
   assert.match(settingsModule,/localStorage\.removeItem\(STORAGE_KEY\)/);
+  assert.match(settingsModule,/PREVIEW_KEY='mission-insights-settings-preview-v1'/);
+  assert.match(settingsModule,/export function applySettingsPreview/);
+  assert.match(settingsModule,/sessionStorage\.setItem\(PREVIEW_KEY/);
+  assert.match(settingsModule,/export function clearSettingsPreview/);
+  assert.match(settingsPage,/id="apply"/);
+  assert.match(settingsPage,/current=applySettingsPreview\(collect\(\)\)/);
+  assert.match(settingsPage,/Only <strong>Save settings<\/strong> commits/);
   assert.match(settingsModule,/function validate/);
 });
 
