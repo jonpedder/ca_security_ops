@@ -28,6 +28,10 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/id="helpPanel"/);
   assert.doesNotMatch(settingsPage,/id="printHelp"/);
   assert.match(settingsPage,/id="downloadHelpPdf"/);
+  assert.match(settingsPage,/id="expandAllHelp"[^>]*>Expand All</);
+  assert.match(settingsPage,/id="collapseAllHelp"[^>]*>Collapse All</);
+  assert.match(settingsPage,/expandAllHelp'\)\.onclick=.*section\.open=true/);
+  assert.match(settingsPage,/collapseAllHelp'\)\.onclick=.*section\.open=false/);
   assert.match(settingsPage,/Download PDF/);
   assert.match(settingsPage,/class="button download-pdf"/);
   assert.match(settingsPage,/const downloadIcon='<svg/);
