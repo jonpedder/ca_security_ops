@@ -58,4 +58,7 @@ test('approval page provides incident and active-triage PDF reports', () => {
   assert.match(approval, /const severityLine=\(label,value\)=>/);
   assert.match(approval, /const color=severityColor\(value\)/);
   assert.match(approval, /p\.severityLine\('Priority',j\.priority\|\|'Unknown'\)/);
+  assert.match(approval, /async function pdfLogoData\(\)/);
+  assert.match(approval, /function drawPdfBrand\(doc,logo\)/);
+  assert.match(approval, /drawPdfBrand\(doc,logo\)/);
 });

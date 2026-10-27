@@ -36,6 +36,10 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/Table of contents/);
   assert.match(settingsPage,/Page '\+page\+' of '\+total/);
   assert.match(settingsPage,/window\.print\(\)/);
+  assert.match(settingsPage,/class="print-brand"/);
+  assert.match(settingsPage,/async function pdfLogoData\(\)/);
+  assert.match(settingsPage,/function drawPdfBrand\(doc,logo\)/);
+  assert.match(settingsPage,/drawPdfBrand\(doc,logo\)/);
   assert.match(settingsPage,/help\/operations-map-live\.png/);
   assert.match(settingsPage,/help\/incident-approval-live\.png/);
 });
