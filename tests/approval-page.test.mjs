@@ -36,7 +36,7 @@ test('triage queue shows watch area and location followed by description', () =>
   assert.match(approval, /id="location"[^>]*aria-label="Filter by location"/);
   assert.match(approval, /id="dateRange"[^>]*aria-label="Filter by date"/);
   assert.match(approval, /id="activeDateRange"[^>]*>All dates</);
-  assert.match(approval, /activeDateRange'\)\.textContent=dateSelect\.selectedOptions/);
+  assert.match(approval, /activeDateRange'\)\.textContent=dateLabel\+' · '\+list\.length\+' '\+\(list\.length===1\?'incident':'incidents'\)/);
   assert.match(approval, /Last 24 hours/);
   assert.match(approval, /Last 7 days/);
   assert.match(approval, /Last 30 days/);
