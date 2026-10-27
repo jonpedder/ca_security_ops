@@ -33,6 +33,8 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/const downloadIcon='<svg/);
   assert.match(settingsPage,/section-print download-pdf/);
   assert.match(settingsPage,/function downloadHelpSectionPdf\(id,button\)/);
+  assert.match(settingsPage,/summary\.append\(printButton\)/);
+  assert.match(settingsPage,/event\.preventDefault\(\);event\.stopPropagation\(\)/);
   assert.match(settingsPage,/downloadHelpSectionPdf\(details\.id,printButton\)/);
   assert.match(settingsPage,/settings\.mjs\?v=help-print-1/);
   assert.match(settingsPage,/PDF download is unavailable\. Please reload the app and try again/);
