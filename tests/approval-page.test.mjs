@@ -25,6 +25,15 @@ test('approval page lists ALERT workflow jobs and exposes persona filters', () =
   assert.match(approval, /Watch Commander/);
 });
 
+test('triage queue shows watch area and location followed by description', () => {
+  assert.match(approval, /function queueInfo\(j\)/);
+  assert.match(approval, /incident_audit\.watch_area/);
+  assert.match(approval, /incident_audit\.alert_location/);
+  assert.match(approval, /class="job-title">'\+esc\(i\.area\)\+' · '\+esc\(i\.location\)/);
+  assert.match(approval, /class="job-description">'\+esc\(i\.description\)/);
+  assert.doesNotMatch(approval, /class="job-title">'\+esc\(String\(j\.jobName\)/);
+});
+
 test('triage list color-codes each workflow status icon', () => {
   assert.match(approval, /appSettings\.statusColors\[s\]/);
   assert.match(approval, /class="status-icon"/);
