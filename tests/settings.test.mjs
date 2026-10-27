@@ -29,6 +29,9 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.doesNotMatch(settingsPage,/id="printHelp"/);
   assert.match(settingsPage,/id="downloadHelpPdf"/);
   assert.match(settingsPage,/Download PDF/);
+  assert.match(settingsPage,/class="button download-pdf"/);
+  assert.match(settingsPage,/const downloadIcon='<svg/);
+  assert.match(settingsPage,/section-print download-pdf/);
   assert.match(settingsPage,/function downloadHelpSectionPdf\(id,button\)/);
   assert.match(settingsPage,/downloadHelpSectionPdf\(details\.id,printButton\)/);
   assert.match(settingsPage,/settings\.mjs\?v=help-print-1/);
