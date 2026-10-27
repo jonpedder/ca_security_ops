@@ -47,6 +47,10 @@ test('triage queue shows watch area and location followed by description', () =>
   assert.match(approval, /function jobCreatedTime\(value\)/);
   assert.match(approval, /jobCreatedTime\(j\.createdDate\)>=cutoff/);
   assert.match(approval, /dateRange'\)\.onchange=renderList/);
+  assert.match(approval, /id="clearFilters"[^>]*>Clear all filters</);
+  assert.match(approval, /clearFilters'\)\.onclick=\(\)=>\{/);
+  for(const id of ['search','watchArea','location','dateRange','status']) assert.match(approval,new RegExp("\\$\\('"+id+"'\\)\\.value=''"));
+  assert.match(approval,/\$\('persona'\)\.value='all'/);
   assert.match(approval, /function updateQueueFilters\(\)/);
   assert.match(approval, /!watchArea\|\|i\.area\.toLowerCase\(\)\.includes\(watchArea\.toLowerCase\(\)\)/);
   assert.match(approval, /!location\|\|i\.location\.toLowerCase\(\)\.includes\(location\.toLowerCase\(\)\)/);
