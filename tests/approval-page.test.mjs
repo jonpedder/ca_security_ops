@@ -32,8 +32,11 @@ test('triage queue shows watch area and location followed by description', () =>
   assert.match(approval, /class="job-title">'\+esc\(i\.area\)\+' · '\+esc\(i\.location\)/);
   assert.match(approval, /class="job-description">'\+esc\(i\.description\)/);
   assert.match(approval, /\.job-description\{[^}]*-webkit-line-clamp:2[^}]*line-clamp:2/);
-  assert.match(approval, /id="watchArea"[^>]*aria-label="Filter by watch area"/);
-  assert.match(approval, /id="location"[^>]*aria-label="Filter by location"/);
+  assert.match(approval, /id="watchArea"[^>]*type="search"[^>]*list="watchAreaOptions"[^>]*aria-label="Search or filter by watch area"/);
+  assert.match(approval, /id="location"[^>]*type="search"[^>]*list="locationOptions"[^>]*aria-label="Search or filter by location"/);
+  assert.match(approval, /id="watchAreaOptions"/);
+  assert.match(approval, /id="locationOptions"/);
+  assert.match(approval, /\.filters \.control\{[^}]*font-size:11px/);
   assert.match(approval, /id="dateRange"[^>]*aria-label="Filter by date"/);
   assert.match(approval, /id="activeDateRange"[^>]*>All dates</);
   assert.match(approval, /activeDateRange'\)\.textContent=dateLabel\+' · '\+list\.length\+' '\+\(list\.length===1\?'incident':'incidents'\)/);
@@ -45,8 +48,10 @@ test('triage queue shows watch area and location followed by description', () =>
   assert.match(approval, /jobCreatedTime\(j\.createdDate\)>=cutoff/);
   assert.match(approval, /dateRange'\)\.onchange=renderList/);
   assert.match(approval, /function updateQueueFilters\(\)/);
-  assert.match(approval, /!watchArea\|\|i\.area===watchArea/);
-  assert.match(approval, /!location\|\|i\.location===location/);
+  assert.match(approval, /!watchArea\|\|i\.area\.toLowerCase\(\)\.includes\(watchArea\.toLowerCase\(\)\)/);
+  assert.match(approval, /!location\|\|i\.location\.toLowerCase\(\)\.includes\(location\.toLowerCase\(\)\)/);
+  assert.match(approval, /watchArea'\)\.oninput=renderList/);
+  assert.match(approval, /location'\)\.oninput=renderList/);
   assert.doesNotMatch(approval, /class="job-title">'\+esc\(String\(j\.jobName\)/);
 });
 
