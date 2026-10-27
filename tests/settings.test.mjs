@@ -39,7 +39,10 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/Unable to download this help PDF:/);
   assert.doesNotMatch(settingsPage,/Open the browser print dialog/);
   assert.match(settingsPage,/mission-insights-'\+id\.replace/);
-  assert.match(settingsPage,/doc\.save\(filename\)/);
+  assert.match(settingsPage,/id="pdfDownloadStatus"/);
+  assert.match(settingsPage,/function savePdfDownload\(doc,filename\)/);
+  assert.match(settingsPage,/link\.download=filename/);
+  assert.match(settingsPage,/savePdfDownload\(doc,filename\)/);
   assert.match(settingsPage,/Table of contents/);
   assert.match(settingsPage,/Page '\+page\+' of '\+total/);
   assert.doesNotMatch(settingsPage,/\.onclick=\(\)=>\{preparePrint\(\);setTimeout\(\(\)=>window\.print\(\),50\)\}/);
