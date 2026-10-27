@@ -26,20 +26,20 @@ test('settings page has one clean document ending without rendered code remnants
 test('settings includes printable operator help, live screenshots, and approval guidance',()=>{
   for(const text of ['Help &amp; How-to','How to initially triage an incident','How to use Incident Approval','Rejecting or returning incidents','Troubleshooting common approval errors','Quick reference checklist']) assert.match(settingsPage,new RegExp(text));
   assert.match(settingsPage,/id="helpPanel"/);
-  assert.match(settingsPage,/id="printHelp"/);
+  assert.doesNotMatch(settingsPage,/id="printHelp"/);
   assert.match(settingsPage,/id="downloadHelpPdf"/);
-  assert.match(settingsPage,/Print PDF/);
+  assert.match(settingsPage,/Download PDF/);
   assert.match(settingsPage,/function downloadHelpSectionPdf\(id,button\)/);
   assert.match(settingsPage,/downloadHelpSectionPdf\(details\.id,printButton\)/);
   assert.match(settingsPage,/settings\.mjs\?v=help-print-1/);
-  assert.match(settingsPage,/PDF download is unavailable\. Open the browser print dialog/);
-  assert.match(settingsPage,/Unable to download this help PDF\. Open the browser print dialog instead/);
-  assert.match(settingsPage,/printHelpSection\(id\)/);
+  assert.match(settingsPage,/PDF download is unavailable\. Please reload the app and try again/);
+  assert.match(settingsPage,/Unable to download this help PDF:/);
+  assert.doesNotMatch(settingsPage,/Open the browser print dialog/);
   assert.match(settingsPage,/mission-insights-'\+id\.replace/);
   assert.match(settingsPage,/doc\.save\(filename\)/);
   assert.match(settingsPage,/Table of contents/);
   assert.match(settingsPage,/Page '\+page\+' of '\+total/);
-  assert.match(settingsPage,/window\.print\(\)/);
+  assert.doesNotMatch(settingsPage,/\.onclick=\(\)=>\{preparePrint\(\);setTimeout\(\(\)=>window\.print\(\),50\)\}/);
   assert.match(settingsPage,/class="print-brand"/);
   assert.match(settingsPage,/async function pdfLogoData\(\)/);
   assert.match(settingsPage,/function drawPdfBrand\(doc,logo\)/);
