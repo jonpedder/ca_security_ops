@@ -34,6 +34,14 @@ test('triage queue shows watch area and location followed by description', () =>
   assert.match(approval, /\.job-description\{[^}]*-webkit-line-clamp:2[^}]*line-clamp:2/);
   assert.match(approval, /id="watchArea"[^>]*aria-label="Filter by watch area"/);
   assert.match(approval, /id="location"[^>]*aria-label="Filter by location"/);
+  assert.match(approval, /id="dateRange"[^>]*aria-label="Filter by date"/);
+  assert.match(approval, /Last 24 hours/);
+  assert.match(approval, /Last 7 days/);
+  assert.match(approval, /Last 30 days/);
+  assert.match(approval, /Last 90 days/);
+  assert.match(approval, /function jobCreatedTime\(value\)/);
+  assert.match(approval, /jobCreatedTime\(j\.createdDate\)>=cutoff/);
+  assert.match(approval, /dateRange'\)\.onchange=renderList/);
   assert.match(approval, /function updateQueueFilters\(\)/);
   assert.match(approval, /!watchArea\|\|i\.area===watchArea/);
   assert.match(approval, /!location\|\|i\.location===location/);
