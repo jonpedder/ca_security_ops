@@ -71,7 +71,7 @@ test('main application tab labels are configurable and sections collapse by defa
   assert.doesNotMatch(settingsPage,/<details class="card" open>/);
 });
 
-test('app branding is configurable below settings templates',()=>{
+test('app branding is configurable below settings templates',async()=>{
   assert.match(settingsModule,/branding:\{appName:'Mission Insights',subtitle:'A Watch Center Integration',logoUrl:'',basemap:'webmap',colors:/);
   assert.match(settingsModule,/export function applyBranding/);
   assert.match(settingsPage,/Settings templates[\s\S]*App branding[\s\S]*Main app tab labels/);
@@ -87,10 +87,13 @@ test('app branding is configurable below settings templates',()=>{
   assert.match(settingsPage,/id="basemapThumbnail"/);
   assert.match(settingsPage,/id="basemapThumbnailCaption"/);
   assert.match(settingsPage,/function updateBasemapThumbnail\(\)/);
-  assert.match(settingsPage,/function basemapExampleSvg\(id,label\)/);
-  assert.match(settingsPage,/'webmap':\['#18394d'/);
+  assert.match(settingsPage,/const basemapPreviewImages=\{webmap:'webmap\.svg'/);
+  for(const image of ['webmap.svg','streets-vector.svg','topo-vector.svg','satellite.svg','hybrid.svg','gray-vector.svg','dark-gray-vector.svg','oceans.svg','osm.svg']){
+    assert.match(settingsPage,new RegExp("'"+image.replace('.','\\.')+"'"));
+    assert.ok((await readFile(new URL('../assets/basemaps/'+image,import.meta.url),'utf8')).includes('<svg'));
+  }
   assert.match(settingsPage,/Illustrative saved Web Map style icon/);
-  assert.match(settingsPage,/data:image\/svg\+xml/);
+  assert.match(settingsPage,/\.\/assets\/basemaps\//);
   assert.match(settingsPage,/Illustrative '\+label\+' basemap example/);
   assert.match(settingsPage,/illustrative style example, not a live map/);
   assert.match(settingsPage,/brandingBasemap'\)\.onchange=updateBasemapThumbnail/);
