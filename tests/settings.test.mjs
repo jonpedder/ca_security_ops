@@ -55,7 +55,7 @@ test('main application tab labels are configurable and sections collapse by defa
 });
 
 test('app branding is configurable below settings templates',()=>{
-  assert.match(settingsModule,/branding:\{appName:'Mission Insights',subtitle:'A Watch Center Integration',logoUrl:'',colors:/);
+  assert.match(settingsModule,/branding:\{appName:'Mission Insights',subtitle:'A Watch Center Integration',logoUrl:'',basemap:'webmap',colors:/);
   assert.match(settingsModule,/export function applyBranding/);
   assert.match(settingsPage,/Settings templates[\s\S]*App branding[\s\S]*Main app tab labels/);
   for(const id of ['brandingAppName','brandingSubtitle','brandingLogoUrl','brandingLogoUpload','brandingLogoPreview']) assert.match(settingsPage,new RegExp('id="'+id+'"'));
@@ -66,6 +66,13 @@ test('app branding is configurable below settings templates',()=>{
   for(const label of ['Operations Map','Incident Approval','Settings']) assert.match(settingsPage,new RegExp('branding-preview-label">'+label));
   assert.match(settingsPage,/function updateBrandingDraftPreview\(\)/);
   assert.match(settingsPage,/id="brandingColors"/);
+  assert.match(settingsPage,/id="brandingBasemap"/);
+  assert.match(settingsPage,/Web map default/);
+  assert.match(settingsPage,/Imagery with labels/);
+  assert.match(settingsModule,/basemap:'webmap'/);
+  assert.match(operations,/function applyConfiguredBasemap\(\)/);
+  assert.match(operations,/originalBasemap=map\.basemap\?\.clone\(\)/);
+  assert.match(operations,/applyConfiguredBasemap\(\);state\.tickerSpeed/);
   assert.match(settingsPage,/Theme colors/);
   assert.match(settingsPage,/data-branding-color/);
   for(const color of ['Header','Page background','Panel','Panel alternate','Accent and buttons','Primary text','Muted text','Borders']) assert.match(settingsPage,new RegExp(color));
