@@ -24,6 +24,12 @@ test('triage list color-codes each workflow status icon', () => {
   assert.match(approval, /\.pill\{[^}]*color:var\(--status-color\)/);
 });
 
+test('loading triaged incidents status is red only while loading', () => {
+  assert.match(approval, /#updated\.loading\{color:#ff4d5f;font-weight:700\}/);
+  assert.match(approval, /classList\.add\('loading'\)/);
+  assert.match(approval, /classList\.remove\('loading'\)/);
+});
+
 test('approval status filter defaults to Submitted on initial load', () => {
   assert.match(approval, /statusInitialized:false/);
   assert.match(approval, /current=state\.statusInitialized\?sel\.value:'Submitted'/);
