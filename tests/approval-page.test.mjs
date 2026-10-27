@@ -9,10 +9,12 @@ test('operations page links to the incident approval page', () => {
   assert.match(operations, /href="\.\/approval\.html"/);
 });
 
-test('triage PDF action is right-aligned in the workflow queue header', () => {
-  assert.doesNotMatch(approval, /header-actions[^<]*<button id="allPdf"/);
-  assert.match(approval, /class="panel-head-row"[^]*?<button id="allPdf" class="button secondary queue-pdf"/);
+test('refresh and triage PDF actions are right-aligned in the workflow queue header', () => {
+  const headerActions=approval.match(/<div class="header-actions">(.*?)<\/div><\/header>/)?.[1]||'';
+  assert.doesNotMatch(headerActions, /id="(?:refresh|allPdf)"/);
+  assert.match(approval, /class="panel-head-row"[^]*?class="queue-actions"><button id="refresh"[^]*?<button id="allPdf"/);
   assert.match(approval, /\.panel-head-row\{[^}]*justify-content:space-between/);
+  assert.match(approval, /\.queue-actions\{[^}]*display:flex[^}]*gap:8px/);
 });
 
 test('approval page lists ALERT workflow jobs and exposes persona filters', () => {
