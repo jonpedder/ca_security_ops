@@ -31,6 +31,10 @@ test('settings includes printable operator help, live screenshots, and approval 
   assert.match(settingsPage,/Print PDF/);
   assert.match(settingsPage,/function downloadHelpSectionPdf\(id,button\)/);
   assert.match(settingsPage,/downloadHelpSectionPdf\(details\.id,printButton\)/);
+  assert.match(settingsPage,/settings\.mjs\?v=help-print-1/);
+  assert.match(settingsPage,/PDF download is unavailable\. Open the browser print dialog/);
+  assert.match(settingsPage,/Unable to download this help PDF\. Open the browser print dialog instead/);
+  assert.match(settingsPage,/printHelpSection\(id\)/);
   assert.match(settingsPage,/mission-insights-'\+id\.replace/);
   assert.match(settingsPage,/doc\.save\(filename\)/);
   assert.match(settingsPage,/Table of contents/);
