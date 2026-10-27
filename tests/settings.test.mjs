@@ -85,6 +85,8 @@ test('app branding is configurable below settings templates',()=>{
   assert.match(settingsPage,/id="basemapThumbnailCaption"/);
   assert.match(settingsPage,/function updateBasemapThumbnail\(\)/);
   assert.match(settingsPage,/function basemapExampleSvg\(id,label\)/);
+  assert.match(settingsPage,/'webmap':\['#18394d'/);
+  assert.match(settingsPage,/Illustrative saved Web Map style icon/);
   assert.match(settingsPage,/data:image\/svg\+xml/);
   assert.match(settingsPage,/Illustrative '\+label\+' basemap example/);
   assert.match(settingsPage,/illustrative style example, not a live map/);
