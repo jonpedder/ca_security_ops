@@ -127,7 +127,11 @@ test('shared settings preserve immutable base defaults and versioned storage',()
   assert.match(settingsModule,/PREVIEW_KEY='mission-insights-settings-preview-v1'/);
   assert.match(settingsModule,/export function applySettingsPreview/);
   assert.match(settingsModule,/sessionStorage\.setItem\(PREVIEW_KEY/);
+  assert.match(settingsModule,/export function hasActiveSettingsPreview/);
+  assert.match(settingsModule,/sessionStorage\.getItem\(PREVIEW_KEY\)!==null/);
   assert.match(settingsModule,/export function clearSettingsPreview/);
+  assert.match(settingsPage,/const active=hasActiveSettingsPreview\(\)/);
+  assert.match(settingsPage,/active&&!confirm\('Discard the active review draft/);
   assert.match(settingsPage,/id="apply"/);
   assert.match(settingsPage,/current=applySettingsPreview\(collect\(\)\)/);
   assert.match(settingsPage,/Only <strong>Save settings<\/strong> commits/);
