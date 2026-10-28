@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 const approval = await readFile(new URL('../approval.html', import.meta.url), 'utf8');
 const operations = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const workflowSpec = JSON.parse(await readFile(new URL('../workflow/incident-triage.spec.json', import.meta.url), 'utf8'));
 
 test('operations page links to the incident approval page', () => {
   assert.match(operations, /href="\.\/approval\.html"/);
@@ -117,4 +118,17 @@ test('approval page provides incident and active-triage PDF reports', () => {
   assert.match(approval, /async function pdfLogoData\(\)/);
   assert.match(approval, /function drawPdfBrand\(doc,logo\)/);
   assert.match(approval, /drawPdfBrand\(doc,logo\)/);
+});
+
+
+test('approval decision includes Alert in Teams Channel with a No default', () => {
+  assert.match(approval, /Alert in Teams Channel<select id="alertstatus"/);
+  assert.match(approval, /<option value="No" selected>No<\/option><option value="Yes">Yes<\/option>/);
+  assert.match(approval, /extendedProperty\(j,'request_details','alertstatus','No'\)/);
+  assert.match(approval, /'request_details.alertstatus':alertstatus\|\|'No'/);
+  assert.match(approval, /Teams Channel Status/);
+  const requestDetails=workflowSpec.extendedPropertyTables.find(table=>table.tableName==='request_details');
+  const field=requestDetails.fields.find(item=>item.propertyName==='alertstatus');
+  assert.equal(field.propertyAlias,'Alert in Teams Channel');
+  assert.deepEqual(field.domain,['No','Yes']);
 });

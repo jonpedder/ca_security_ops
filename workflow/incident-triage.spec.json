@@ -430,6 +430,18 @@
           ]
         },
         {
+          "propertyName": "alertstatus",
+          "propertyAlias": "Alert in Teams Channel",
+          "dataType": "String",
+          "fieldLength": 3,
+          "required": false,
+          "editable": true,
+          "domain": [
+            "No",
+            "Yes"
+          ]
+        },
+        {
           "propertyName": "decision",
           "propertyAlias": "Approval Decision",
           "dataType": "String",
