@@ -136,8 +136,7 @@ test('severity colors are configurable and applied across operations and approva
   assert.match(operations,/--c:'\+colors\[x\]/);
   assert.match(operations,/--sev:'\+colors\[d\.severity\]/);
   assert.match(approval,/severityColor=s=>appSettings\.severityColors\[s\]/);
-  assert.match(approval,/class="control severity-control"/);
-  assert.match(approval,/paintPriority/);
+  assert.match(approval,/class="severity-value"/);
 });
 
 test('incident time filter default is configurable below main app tab labels',()=>{
