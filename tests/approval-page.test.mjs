@@ -99,8 +99,12 @@ test('approval claims the current step before updating the job', () => {
   assert.match(approval, /await claimCurrentSteps\(current\)/);
 });
 
-test('approval lists only jobs from the current audited template', () => {
+test('approval lists only jobs status-modified through incident triage', () => {
   assert.match(approval, /jobTemplateId==='FkGUEznHSqWukSFzDxeC4w'/);
+  assert.match(approval, /function triageStatusWasModified\(j\)/);
+  assert.match(approval, /c\.audit\?\.eventType==='Status Changed'&&c\.audit\?\.field==='Status'/);
+  assert.match(approval, /if\(!triageStatusWasModified\(j\)\)return false/);
+  assert.match(approval, /state\.details\.clear\(\);state\.queueAttempted\.clear\(\)/);
 });
 
 test('approval page provides incident and active-triage PDF reports', () => {
