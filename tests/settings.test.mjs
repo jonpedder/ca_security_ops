@@ -190,7 +190,11 @@ test('ticker size scales the ticker, text, and symbols and persists a default',(
   assert.match(settingsModule,/\['small','medium','large'\]\.includes\(tickerSize\)/);
   assert.match(settingsPage,/next\.tickerSize=\$\('tickerSize'\)\.value/);
   assert.match(settingsPage,/Text, incident symbols, spacing, and ticker height scale together/);
+  assert.match(operations,/<span class="ticker-label">Ticker<\/span>/);
+  assert.doesNotMatch(operations,/Inbound incidents/);
   assert.match(operations,/id="tickerSize" class="ticker-speed ticker-size"/);
+  assert.match(operations,/\.ticker-speed\{[^}]*height:26px[^}]*font-size:10px/);
+  assert.doesNotMatch(operations,/ticker-control-height/);
   assert.match(operations,/data-ticker-size="medium"/);
   assert.match(operations,/data-ticker-size="large"/);
   assert.match(operations,/--ticker-font-size:14\.667px/);
