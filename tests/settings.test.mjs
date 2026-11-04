@@ -194,7 +194,7 @@ test('ticker size scales the ticker, text, and symbols and persists a default',(
   assert.doesNotMatch(operations,/Inbound incidents/);
   assert.match(operations,/id="tickerSpeed" class="ticker-speed"[^>]*><option value="" selected disabled>Ticker Speed<\/option>/);
   assert.match(operations,/id="tickerSize" class="ticker-speed ticker-size"[^>]*><option value="" selected disabled>Ticker Size<\/option>/);
-  assert.match(operations,/\.ticker-speed\{[^}]*height:26px[^}]*font-size:10px/);
+  assert.match(operations,/\.ticker-speed\{[^}]*width:104px[^}]*min-width:104px[^}]*flex:0 0 104px[^}]*height:26px[^}]*font-size:10px[^}]*white-space:nowrap/);
   assert.doesNotMatch(operations,/ticker-control-height/);
   assert.match(operations,/data-ticker-size="medium"/);
   assert.match(operations,/data-ticker-size="large"/);
