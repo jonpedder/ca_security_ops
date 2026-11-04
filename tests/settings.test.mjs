@@ -16,6 +16,8 @@ test('settings page exposes all requested configuration sections and reset',()=>
   assert.match(settingsPage,/Filter defaults/);
   assert.match(settingsPage,/id="defaultIncidentTime"/);
   assert.match(settingsPage,/id="tickerSpeed"[^>]*><option value="300">Slow<\/option><option value="120">Medium<\/option><option value="75">Fast<\/option><option value="40">Faster<\/option><option value="0">Paused<\/option>/);
+  assert.match(settingsPage,/id="tickerSize"[^>]*><option value="small">Small<\/option><option value="medium">Medium<\/option><option value="large">Large<\/option>/);
+  assert.match(settingsPage,/Medium is one-third larger than Small; Large is one-third larger than Medium/);
 });
 
 test('settings page has one clean document ending without rendered code remnants',()=>{
@@ -114,6 +116,7 @@ test('app branding is configurable below settings templates',async()=>{
   assert.match(operations,/function applyConfiguredBasemap\(\)/);
   assert.match(operations,/originalBasemap=map\.basemap\?\.clone\(\)/);
   assert.match(operations,/applyConfiguredBasemap\(\);state\.tickerSpeed/);
+  assert.match(operations,/state\.tickerSize=appSettings\.tickerSize/);
   assert.match(settingsPage,/Theme colors/);
   assert.match(settingsPage,/data-branding-color/);
   for(const color of ['Header','Page background','Panel','Panel alternate','Accent and buttons','Primary text','Muted text','Borders']) assert.match(settingsPage,new RegExp(color));
@@ -182,6 +185,20 @@ test('settings templates can be exported and imported for preview before saving'
   assert.match(settingsPage,/validateSettings\(parsed\)/);
 });
 
+test('ticker size scales the ticker, text, and symbols and persists a default',()=>{
+  assert.match(settingsModule,/tickerSize:'small'/);
+  assert.match(settingsModule,/\['small','medium','large'\]\.includes\(tickerSize\)/);
+  assert.match(settingsPage,/next\.tickerSize=\$\('tickerSize'\)\.value/);
+  assert.match(settingsPage,/Text, incident symbols, spacing, and ticker height scale together/);
+  assert.match(operations,/id="tickerSize" class="ticker-speed ticker-size"/);
+  assert.match(operations,/data-ticker-size="medium"/);
+  assert.match(operations,/data-ticker-size="large"/);
+  assert.match(operations,/--ticker-font-size:14\.667px/);
+  assert.match(operations,/--ticker-font-size:19\.556px/);
+  assert.match(operations,/function applyTickerSize\(size\)/);
+  assert.match(operations,/\$\('tickerSize'\)\.onchange=e=>applyTickerSize/);
+});
+
 test('operations and approval pages both link to and consume shared settings',()=>{
   assert.match(operations,/href="\.\/settings\.html"/);
   assert.match(approval,/href="\.\/settings\.html"/);
@@ -189,6 +206,7 @@ test('operations and approval pages both link to and consume shared settings',()
   assert.match(approval,/loadSettings,subscribeSettings,applyLabels/);
   assert.match(operations,/appSettings\.refreshMs/);
   assert.match(operations,/tickerSpeed:appSettings\.tickerSpeed/);
+  assert.match(operations,/tickerSize:appSettings\.tickerSize/);
   assert.match(approval,/appSettings\.personaLabels/);
   assert.match(approval,/appSettings\.statusColors/);
 });
