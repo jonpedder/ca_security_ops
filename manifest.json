@@ -1,7 +1,7 @@
 {
   "name": "Mission Insights",
   "short_name": "Mission Insights",
-  "description": "An authenticated operational display for the ArcGIS Watch Center alert feed. This is not an official Cal OES system.",
+  "description": "An authenticated operational display for the ArcGIS Watch Center alert feed.",
   "id": "./",
   "start_url": "./index.html",
   "scope": "./",

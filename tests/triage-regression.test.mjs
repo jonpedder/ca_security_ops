@@ -3,12 +3,32 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+const approvalHtml = await readFile(new URL('../approval.html', import.meta.url), 'utf8');
+const manifest = await readFile(new URL('../manifest.json', import.meta.url), 'utf8');
 
 test('application branding uses configurable app name, subtitle, and logo', () => {
   assert.match(html, /<title>Mission Insights<\/title>/);
   assert.match(html, /data-branding="appName">Mission Insights<\/h1><p data-branding="subtitle">A Watch Center Integration<\/p>/);
   assert.match(html, /data-branding-logo/);
   assert.match(html, /applyBranding\(document,appSettings\.branding\)/);
+});
+
+test('dashboard panes expose persistent vertical and horizontal resize grips', () => {
+  assert.match(html, /id="leftResizeGrip"/);
+  assert.match(html, /id="rightResizeGrip"/);
+  assert.match(html, /id="trendResizeGrip"/);
+  assert.match(html, /function setupDashboardResizers\(\)/);
+  assert.match(approvalHtml, /id="approvalResizeGrip"/);
+  assert.match(approvalHtml, /function setupApprovalResizer\(\)/);
+});
+
+test('ArcGIS platform attribution is prominent and obsolete disclaimer is removed', () => {
+  assert.match(html, /class="powered-by">Powered by ArcGIS Velocity and Workflow Manager<\/p>/);
+  assert.match(approvalHtml, /class="powered-by">Powered by ArcGIS Velocity and Workflow Manager<\/p>/);
+  assert.match(html, /\.brand \.powered-by\{[^}]*font-size:11px[^}]*font-weight:700/);
+  assert.doesNotMatch(html, /not an official Cal OES system/i);
+  assert.doesNotMatch(approvalHtml, /not an official Cal OES system/i);
+  assert.doesNotMatch(manifest, /not an official Cal OES system/i);
 });
 
 test('header shows the authenticated ArcGIS username and full name', () => {
