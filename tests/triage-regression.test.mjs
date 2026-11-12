@@ -18,6 +18,10 @@ test('dashboard panes expose persistent vertical and horizontal resize grips', (
   assert.match(html, /id="rightResizeGrip"/);
   assert.match(html, /id="trendResizeGrip"/);
   assert.match(html, /function setupDashboardResizers\(\)/);
+  assert.match(html, /raw===null\?NaN:Number\(raw\)/);
+  assert.match(html, /left=stored\('missionInsights\.leftWidth',320,220\)/);
+  assert.match(html, /right=stored\('missionInsights\.rightWidth',340,250\)/);
+  assert.match(html, /trend=stored\('missionInsights\.trendHeight',164,110\)/);
   assert.match(approvalHtml, /id="approvalResizeGrip"/);
   assert.match(approvalHtml, /function setupApprovalResizer\(\)/);
 });
