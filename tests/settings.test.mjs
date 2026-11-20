@@ -20,6 +20,15 @@ test('settings page exposes all requested configuration sections and reset',()=>
   assert.match(settingsPage,/Medium is one-third larger than Small; Large is one-third larger than Medium/);
 });
 
+test('settings includes a routed Mission Insights demo video',()=>{
+  assert.match(settingsPage,/id="videoTab"[^>]*aria-controls="videoPanel"[^>]*>Demo Video</);
+  assert.match(settingsPage,/id="demo-video-guide"/);
+  assert.match(settingsPage,/Mission Insights\.mp4/);
+  assert.match(settingsPage,/id="demoVideoLink"[^>]*href="https:\/\/esriis-my\.sharepoint\.com\/[^\"]*IQC7L3b8QKFPTqnlHY03JyY0AerYl2OEOUsfiePfZ1XtRxI[^\"]*"[^>]*target="_blank"[^>]*rel="noopener"/);
+  assert.match(settingsPage,/Open Demo Video - Esri Access ↗/);
+  assert.match(settingsPage,/#demo-video-guide/);
+});
+
 test('settings page has one clean document ending without rendered code remnants',()=>{
   assert.equal((settingsPage.match(/<\/script><\/body><\/html>/g)||[]).length,1);
   assert.ok(settingsPage.trimEnd().endsWith('</script></body></html>'));
